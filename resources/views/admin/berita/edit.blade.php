@@ -67,6 +67,16 @@
                     <div class="mb-3">
                         <label for="file" class="form-label">Dokumen Lampiran</label>
                         <input type="file" name="file" id="file" class="form-control">
+                        @php
+                            $namaFile = $berita->file ? basename($berita->file) : null;
+                        @endphp
+
+                        @if ($berita->file)
+                            donwload file : <a href="{{ asset('storage/' . $berita->file) }}" download>
+                                {{ $namaFile }}</a>
+                        @else
+                            <p>Tidak ada file</p>
+                        @endif
                     </div>
 
                     <div class="mb-2">

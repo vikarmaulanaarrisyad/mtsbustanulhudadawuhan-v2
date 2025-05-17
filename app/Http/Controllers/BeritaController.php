@@ -45,7 +45,7 @@ class BeritaController extends Controller
                 <a href="' . route('berita.edit', $q->id) . '" class="btn btn-sm" style="background-color:#ff7f27; color:#fff;" title="Edit">
                     <i class="fa fa-pencil-alt"></i>
                 </a>
-                <button class="btn btn-sm" style="background-color:#d81b60; color:#fff;" title="Delete">
+                <button onclick="deleteData(`' . route('berita.destroy', $q->id) . '`,`' . $q->judul . '`)" class="btn btn-sm" style="background-color:#d81b60; color:#fff;" title="Delete">
                     <i class="fa fa-trash"></i>
                 </button>
                 <button class="btn btn-sm" style="background-color:#6755a5; color:#fff;" title="Folder">
@@ -139,6 +139,7 @@ class BeritaController extends Controller
             'user_id' => Auth::user()->id,
             'kategori_id' => 1,
             'judul'     => $request->judul,
+            'status'     => $request->status,
             'ringkasan'     => $request->judul,
             'isi'       => $isiFinal,
             'slug'      => Str::slug($request->judul),
@@ -278,6 +279,22 @@ class BeritaController extends Controller
             Storage::disk('public')->delete($berita->file);
         }
 
+        // Inisialisasi nilai default
+        $file = $berita->file;
+        $nama_file = $berita->nama_file;
+
+        // Jika ada file baru
+        if ($request->hasFile('file')) {
+            // Hapus file lama jika ada
+            if ($berita->file && Storage::disk('public')->exists($berita->file)) {
+                Storage::disk('public')->delete($berita->file);
+            }
+
+            // Upload file baru dengan nama dari request
+            $file = upload('file', $request->file, $request->nama_file);
+            $nama_file = $request->nama_file;
+        }
+
         // Update data
         $berita->update([
             'user_id'       => Auth::user()->id,
@@ -286,10 +303,12 @@ class BeritaController extends Controller
             'ringkasan'     => $request->judul,
             'isi'           => $isiFinal,
             'slug'          => Str::slug($request->judul),
-            'thumbnail'     => $request->hasFile('thumbnail') ? upload('berita', $request->thumbnail, 'thumbnail', $berita->thumbnail) : $berita->thumbnail,
-            'file'          => $request->hasFile('file') ? upload('file', $request->file, $request->nama_file, $berita->file) : $berita->file,
+            'thumbnail'     => $request->hasFile('thumbnail')
+                ? upload('berita', $request->thumbnail, 'thumbnail', $berita->thumbnail)
+                : $berita->thumbnail,
+            'file'          => $file,
             'published_at'  => $request->published_at,
-            'nama_file'     => $request->nama_file,
+            'nama_file'     => $nama_file,
             'status'        => $request->status,
         ]);
 
@@ -298,95 +317,47 @@ class BeritaController extends Controller
         ], 200);
     }
 
-    public function update1(Request $request, $id)
-    {
-        $berita = Berita::findOrfail($id);
-
-        $validator = Validator::make($request->all(), [
-            'judul'        => 'required|string|max:255',
-            'isi'          => 'required|string',
-            'status'       => 'required',
-            'thumbnail'    => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
-            'file'         => 'nullable|mimes:pdf,doc,docx,xls,xlsx,zip|max:5120',
-            'nama_file'    => 'nullable|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status'  => 'error',
-                'errors'  => $validator->errors(),
-                'message' => 'Maaf, inputan yang Anda masukkan salah. Silakan periksa kembali dan coba lagi.',
-            ], 422);
-        }
-
-        // Proses gambar base64 dari isi konten
-        $isi = $request->isi;
-        $dom = new DOMDocument();
-        libxml_use_internal_errors(true);
-        $dom->loadHTML($isi, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-        libxml_clear_errors();
-
-        $images = $dom->getElementsByTagName('img');
-        foreach ($images as $img) {
-            $src = $img->getAttribute('src');
-            if (preg_match('/^data:image\/(\w+);base64,/', $src, $type)) {
-                $data = substr($src, strpos($src, ',') + 1);
-                $data = base64_decode($data);
-                $extension = strtolower($type[1]);
-
-                if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
-                    continue;
-                }
-
-                $filename = Str::random(20) . '.' . $extension;
-                $path = 'images/' . $filename;
-                Storage::disk('public')->put($path, $data);
-
-                $img->setAttribute('src', asset('storage/' . $path));
-            }
-        }
-
-        $isiFinal = $dom->saveHTML();
-
-        $data = [
-            'judul'        => $request->judul,
-            'ringkasan'    => $request->judul,
-            'isi'          => $isiFinal,
-            'slug'         => Str::slug($request->judul),
-            'published_at' => $request->published_at,
-            'status'       => $request->status,
-            'nama_file'    => $request->nama_file,
-        ];
-
-        // Update thumbnail jika diunggah
-        if ($request->hasFile('thumbnail')) {
-            if ($berita->thumbnail && Storage::disk('public')->exists($berita->thumbnail)) {
-                Storage::disk('public')->delete($berita->thumbnail);
-            }
-            $data['thumbnail'] = upload('berita', $request->thumbnail, 'thumbnail');
-        }
-
-        // Update file lampiran jika diunggah
-        if ($request->hasFile('file')) {
-            if ($berita->file && Storage::disk('public')->exists($berita->file)) {
-                Storage::disk('public')->delete($berita->file);
-            }
-            $data['file'] = upload('file', $request->file, $request->nama_file);
-        }
-
-        $berita->update($data);
-
-        return response()->json([
-            'message' => 'Artikel berhasil diperbarui.',
-        ], 200);
-    }
-
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Berita $berita)
+    public function destroy($id)
     {
-        //
+        $berita = Berita::findOrfail($id);
+
+        // Hapus gambar-gambar yang ada di konten 'isi'
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($berita->isi, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+
+        foreach ($dom->getElementsByTagName('img') as $img) {
+            $src = $img->getAttribute('src');
+            $prefix = asset('storage') . '/';
+
+            if (strpos($src, $prefix) === 0) {
+                $relativePath = str_replace($prefix, '', $src);
+                $fullPath = public_path('storage/' . $relativePath);
+                if (file_exists($fullPath)) {
+                    @unlink($fullPath);
+                }
+            }
+        }
+
+        if (!empty($berita->thumbnail)) {
+            if (Storage::disk('public')->exists($berita->thumbnail)) {
+                Storage::disk('public')->delete($berita->thumbnail);
+            }
+        }
+
+        if (!empty($berita->file)) {
+            if (Storage::disk('public')->exists($berita->file)) {
+                Storage::disk('public')->delete($berita->file);
+            }
+        }
+
+        $berita->delete();
+
+        return response()->json(['message' => 'Data berhasil dihapus.']);
     }
 
     public function deleteSelected(Request $request)

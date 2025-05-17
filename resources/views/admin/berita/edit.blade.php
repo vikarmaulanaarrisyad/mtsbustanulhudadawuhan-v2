@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Form Artikel')
+@section('title', 'Edit Artikel')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
@@ -11,13 +11,14 @@
 @section('content')
     <form id="form-artikel" enctype="multipart/form-data">
         @csrf
+        @method('PUT')
         <div class="row">
             <!-- Kolom Kiri -->
             <div class="col-lg-8">
                 <x-card>
                     <x-slot name="header">
                         <div class="d-flex justify-content-between align-items-center">
-                            <span><i class="fas fa-edit"></i> Form Artikel</span>
+                            <span><i class="fas fa-edit"></i> Edit Artikel</span>
                             <a href="{{ route('berita.index') }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-arrow-left"></i> Kembali
                             </a>
@@ -27,13 +28,14 @@
                     <div class="mb-3">
                         <label for="judul" class="form-label fw-semibold">Judul Artikel</label>
                         <input id="judul" name="judul" type="text" class="form-control"
-                            placeholder="Masukkan judul artikel" autocomplete="off">
+                            value="{{ old('judul', $berita->judul) }}" placeholder="Masukkan judul artikel"
+                            autocomplete="off">
                     </div>
 
                     <div class="mb-3">
                         <label for="summernote" class="form-label fw-semibold">Isi Artikel</label>
                         <textarea id="summernote" name="isi" class="form-control summernote" rows="20" cols="20"
-                            placeholder="Tulis isi artikel di sini..."></textarea>
+                            placeholder="Tulis isi artikel di sini...">{{ old('isi', $berita->isi) }}</textarea>
                     </div>
                 </x-card>
             </div>
@@ -50,8 +52,10 @@
                         <input type="file" name="thumbnail" id="thumbnail" class="form-control">
                     </div>
                     <div class="text-center">
-                        <img id="preview-thumbnail" src="#" class="img-thumbnail d-none mt-2"
-                            style="max-height: 200px;" alt="Preview thumbnail">
+                        <img id="preview-thumbnail"
+                            src="{{ $berita->thumbnail ? asset('storage/' . $berita->thumbnail) : '#' }}"
+                            class="img-thumbnail {{ $berita->thumbnail ? '' : 'd-none' }} mt-2" style="max-height: 200px;"
+                            alt="Preview thumbnail">
                     </div>
                 </x-card>
 
@@ -68,36 +72,34 @@
                     <div class="mb-2">
                         <label for="nama_file" class="form-label">Nama Dokumen</label>
                         <input type="text" name="nama_file" id="nama_file" class="form-control"
-                            placeholder="Contoh: Panduan.pdf">
+                            value="{{ old('nama_file', $berita->nama_file) }}" placeholder="Contoh: Panduan.pdf">
                         <small class="text-muted">Nama ini akan tampil sebagai link download.</small>
                     </div>
-                    <div class="mb-2">
-                        <div class="form-group">
-                            <label for="status">Status</label>
-                            <select id="status" class="form-control" name="status">
-                                <option disabled selected>Pilih salah satu</option>
-                                <option value="publish">Publik</option>
-                                <option value="arsip">Arsip</option>
-                                <option value="draft">Draft</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="mb-2">
-                        <div class="form-group">
-                            <label for="published_at">Tanggal Posting <span class="text-danger">*</span></label>
-                            <div class="input-group datetimepicker" id="published_at" data-target-input="nearest">
-                                <input type="text" name="published_at" class="form-control datetimepicker-input"
-                                    data-target="#published_at" data-toggle="datetimepicker" autocomplete="off"
-                                    value="{{ \Carbon\Carbon::now()->format('Y-m-d HH:mm:ss') }}" />
 
-                                <div class="input-group-append" data-target="#published_at" data-toggle="datetimepicker">
-                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                </div>
+                    <div class="mb-2">
+                        <label for="status">Status</label>
+                        <select id="status" class="form-control" name="status">
+                            <option disabled>Pilih salah satu</option>
+                            <option value="publish" {{ $berita->status == 'publish' ? 'selected' : '' }}>Publik</option>
+                            <option value="arsip" {{ $berita->status == 'arsip' ? 'selected' : '' }}>Arsip</option>
+                            <option value="draft" {{ $berita->status == 'draft' ? 'selected' : '' }}>Draft</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-2">
+                        <label for="published_at">Tanggal Posting <span class="text-danger">*</span></label>
+                        <div class="input-group datetimepicker" id="published_at" data-target-input="nearest">
+                            <input type="text" name="published_at" class="form-control datetimepicker-input"
+                                data-target="#published_at" data-toggle="datetimepicker" autocomplete="off"
+                                value="{{ old('published_at', $berita->published_at) }}" />
+                            <div class="input-group-append" data-target="#published_at" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
                         </div>
                     </div>
+
                     <button type="submit" class="btn btn-primary btn-sm">
-                        <i class="fas fa-save"></i> Simpan Artikel
+                        <i class="fas fa-save"></i> Update Artikel
                     </button>
                 </x-card>
             </div>
@@ -128,7 +130,7 @@
             }
         });
 
-        // AJAX Simpan Artikel
+        // AJAX Update Artikel
         $('#form-artikel').on('submit', function(e) {
             e.preventDefault();
 
@@ -144,7 +146,7 @@
             let formData = new FormData(this);
 
             $.ajax({
-                url: '{{ route('berita.store') }}', // Ubah sesuai route simpan artikel kamu
+                url: '{{ route('berita.update', $berita->id) }}',
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -153,12 +155,11 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
-                        text: 'Artikel berhasil disimpan.',
+                        text: 'Artikel berhasil diperbarui.',
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href =
-                            '{{ route('berita.index') }}'; // Redirect setelah simpan
+                        window.location.href = '{{ route('berita.index') }}';
                     });
                 },
                 error: function(xhr) {

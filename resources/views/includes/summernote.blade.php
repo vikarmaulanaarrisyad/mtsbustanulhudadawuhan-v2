@@ -9,10 +9,18 @@
 @push('scripts')
     <script>
         $('.summernote').summernote({
-            fontNames: [''],
-            height: 250
+            //fontNames: [''],
+            height: 450,
+            toolbar: [
+                ['style', ['style']],
+                ['font', ['bold', 'underline', 'clear']],
+                ['color', ['color']],
+                ['para', ['ul', 'ol', 'paragraph']],
+                ['table', ['table']],
+                ['insert', ['link', 'picture', 'video']],
+                ['view', ['fullscreen', 'codeview', ]]
+            ]
         });
-
         $('.note-btn-group.note-fontname').remove();
         setTimeout(() => {
             $('.note-btn-group.note-fontname').remove();

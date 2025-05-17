@@ -1,7 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
 use Carbon\Carbon;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('upload')) {
     function upload($directory, $file, $filename = "")
@@ -14,6 +15,19 @@ if (!function_exists('upload')) {
         return "$directory/$filename";
     }
 }
+if (!function_exists('uploadFile')) {
+    function uploadFile($folder, $file, $filename = null, $oldFile = null)
+    {
+        if ($oldFile && Storage::disk('public')->exists($oldFile)) {
+            Storage::disk('public')->delete($oldFile);
+        }
+
+        $name = $filename ? Str::slug(pathinfo($filename, PATHINFO_FILENAME)) . '.' . $file->getClientOriginalExtension() : $file->hashName();
+        return $file->storeAs($folder, $name, 'public');
+    }
+}
+
+
 
 if (!function_exists('format_uang')) {
     function format_uang($angka)

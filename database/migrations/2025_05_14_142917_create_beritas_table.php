@@ -22,6 +22,8 @@ return new class extends Migration
             $table->foreignId('kategori_id')->constrained('kategoris')->onDelete('cascade');
             $table->enum('status', ['draft', 'publish', 'arsip'])->default('draft');
             $table->timestamp('published_at')->nullable();
+            $table->string('nama_file')->nullable();
+            $table->string('file')->nullable();
             $table->timestamps();
         });
     }

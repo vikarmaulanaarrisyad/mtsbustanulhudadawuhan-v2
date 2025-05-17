@@ -21,7 +21,7 @@
             icons: {
                 time: 'far fa-clock'
             },
-            format: 'YYYY-MM-DD HH:mm',
+            format: 'YYYY-MM-DD HH:mm:ss',
             locale: 'id'
         });
 

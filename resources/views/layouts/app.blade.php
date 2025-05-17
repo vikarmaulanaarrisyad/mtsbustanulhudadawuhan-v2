@@ -58,6 +58,12 @@
             display: block !important;
             /* Menampilkan dropdown dalam gaya blok */
         }
+
+        .status-toggle {
+            border: none !important;
+            background: none !important;
+            outline: none !important;
+        }
     </style>
 
     @stack('css')

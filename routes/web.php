@@ -43,11 +43,13 @@ Route::group(['middleware' => 'auth'], function () {
     Route::group(['middleware' => 'role:admin', 'prefix' => 'admin'], function () {
         //Kategori
         Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
+        Route::get('/kategori/get-all', [KategoriController::class, 'getAll'])->name('kategori.getAll');
         Route::resource('/kategori', KategoriController::class);
 
         // Berita
         Route::get('/berita/data', [BeritaController::class, 'data'])->name('berita.data');
         Route::resource('/berita', BeritaController::class);
+        Route::put('/berita/kategori/update/{id}', [BeritaController::class, 'updateKategori'])->name('berita.kategori.update');
         Route::post('/berita/delete-selected', [BeritaController::class, 'deleteSelected'])->name('berita.deleteSelected');
 
 

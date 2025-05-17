@@ -10,6 +10,11 @@ class Berita extends Model
 {
     protected $guarded = ['id'];
 
+    public function kategori()
+    {
+        return $this->belongsTo(Kategori::class);
+    }
+
     protected function aktif(Builder $query): void
     {
         $query->where('active', 1);

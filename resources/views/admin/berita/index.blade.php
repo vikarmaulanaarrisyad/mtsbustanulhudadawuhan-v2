@@ -40,11 +40,12 @@
             </x-card>
         </div>
     </div>
-    @include('admin.berita.form')
+    @include('admin.berita.update_kategori')
 @endsection
 
 @include('includes.select2')
 @include('includes.datatables')
+@include('includes.select2')
 
 @push('scripts')
     <script>
@@ -180,47 +181,6 @@
             resetForm(`${modal} form`);
         }
 
-        function editForm(url, title = 'Edit Data') {
-            Swal.fire({
-                title: "Memuat...",
-                text: "Mohon tunggu sebentar...",
-                allowOutsideClick: false,
-                allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading(); // Menampilkan spinner loading
-                }
-            });
-
-            $.get(url)
-                .done(response => {
-                    Swal.close(); // Tutup loading setelah sukses
-                    $(modal).modal('show');
-                    $(`${modal} .modal-title`).text(title);
-                    $(`${modal} form`).attr('action', url);
-                    $(`${modal} [name=_method]`).val('put');
-
-                    resetForm(`${modal} form`);
-                    loopForm(response.data);
-
-                    $('#kategori_id')
-                        .append(new Option(response.data.kategori.nama, response.data.kategori.id, true, true))
-                        .trigger('change');
-                })
-                .fail(errors => {
-                    Swal.close(); // Tutup loading jika terjadi error
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops! Gagal',
-                        text: errors.responseJSON?.message || 'Terjadi kesalahan saat memuat data.',
-                        showConfirmButton: true,
-                    });
-
-                    if (errors.status == 422) {
-                        loopErrors(errors.responseJSON.errors);
-                    }
-                });
-        }
-
         function submitForm(originalForm) {
             $(button).prop('disabled', true);
 
@@ -346,6 +306,47 @@
                     });
                 }
             });
+        }
+
+        function updateKategori(url, action, title = "Ubah Kategori") {
+            Swal.fire({
+                title: "Memuat...",
+                text: "Mohon tunggu sebentar...",
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                didOpen: () => {
+                    Swal.showLoading(); // Menampilkan spinner loading
+                }
+            });
+
+            $.get(url)
+                .done(response => {
+                    Swal.close(); // Tutup loading setelah sukses
+                    $(modal).modal('show');
+                    $(`${modal} .modal-title`).text(title);
+                    $(`${modal} form`).attr('action', action);
+                    $(`${modal} [name=_method]`).val('put');
+
+                    resetForm(`${modal} form`);
+                    loopForm(response.data);
+
+                    $('#kategori_id')
+                        .append(new Option(response.data.kategori.nama, response.data.kategori.id, true, true))
+                        .trigger('change');
+                })
+                .fail(errors => {
+                    Swal.close(); // Tutup loading jika terjadi error
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops! Gagal',
+                        text: errors.responseJSON?.message || 'Terjadi kesalahan saat memuat data.',
+                        showConfirmButton: true,
+                    });
+
+                    if (errors.status == 422) {
+                        loopErrors(errors.responseJSON.errors);
+                    }
+                });
         }
     </script>
 @endpush

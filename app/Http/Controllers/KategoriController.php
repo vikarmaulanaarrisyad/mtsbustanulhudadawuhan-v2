@@ -15,6 +15,25 @@ class KategoriController extends Controller
         return view('admin.kategori.index');
     }
 
+    public function getAll(Request $request)
+    {
+        $search = $request->get('q', '');
+
+        // Query kategori, filter jika ada pencarian
+        $query = Kategori::query();
+
+        if ($search) {
+            $query->where('nama', 'like', "%{$search}%");
+        }
+
+        // Ambil data kategori, batasi misal 10 hasil
+        $categories = $query->select('id', 'nama as text')
+            ->limit(10)
+            ->get();
+
+        return response()->json($categories);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

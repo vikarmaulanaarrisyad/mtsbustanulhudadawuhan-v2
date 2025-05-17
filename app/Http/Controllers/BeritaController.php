@@ -38,7 +38,7 @@ class BeritaController extends Controller
             })
 
             ->addColumn('kategori', function ($q) {
-                return '';
+                return $q->kategori->nama ?? '-';
             })
             ->addColumn('aksi', function ($q) {
                 return '
@@ -48,7 +48,7 @@ class BeritaController extends Controller
                 <button onclick="deleteData(`' . route('berita.destroy', $q->id) . '`,`' . $q->judul . '`)" class="btn btn-sm" style="background-color:#d81b60; color:#fff;" title="Delete">
                     <i class="fa fa-trash"></i>
                 </button>
-                <button class="btn btn-sm" style="background-color:#6755a5; color:#fff;" title="Folder">
+                <button onclick="updateKategori(`' . route('berita.show', $q->id) . '`, `' . route('berita.kategori.update', $q->id) . '`)" class="btn btn-sm" style="background-color:#6755a5; color:#fff;" title="Kategori">
                     <i class="fa fa-folder"></i>
                 </button>
                 <button class="btn btn-sm" style="background-color:#cde3f3; color:#000;" title="Chat">
@@ -159,9 +159,19 @@ class BeritaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Berita $berita)
+    public function show($id)
     {
-        //
+        $berita = Berita::findOrfail($id);
+
+        return response()->json([
+            'data' => [
+                'id' => $berita->id,
+                'kategori' => [
+                    'id' => $berita->kategori_id,
+                    'nama' => $berita->kategori->nama ?? '-'
+                ]
+            ]
+        ]);
     }
 
     /**
@@ -411,5 +421,17 @@ class BeritaController extends Controller
         } catch (\Exception $e) {
             return response()->json(['message' => 'Gagal menghapus data: ' . $e->getMessage()], 500);
         }
+    }
+
+    public function updateKategori(Request $request, $id)
+    {
+        $berita = Berita::findOrfail($id);
+        $berita->update([
+            'kategori_id' => $request->kategori_id,
+        ]);
+
+        return response()->json([
+            'message' => 'Kategori berita berhasil diperbarui.',
+        ], 200);
     }
 }

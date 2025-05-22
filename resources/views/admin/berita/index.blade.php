@@ -34,6 +34,7 @@
                         <th>KATEGORI</th>
                         <th>DIPOSTING PADA</th>
                         <th>STATUS</th>
+                        <th>SLIDER</th>
                         <th>Aksi</th>
                     </x-slot>
                 </x-table>
@@ -84,6 +85,9 @@
                 },
                 {
                     data: 'status'
+                },
+                {
+                    data: 'is_slider'
                 },
                 {
                     data: 'aksi',
@@ -347,6 +351,54 @@
                         loopErrors(errors.responseJSON.errors);
                     }
                 });
+        }
+
+        function updateSlider(url) {
+            Swal.fire({
+                title: "Yakin ingin mengubah status slider?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ya, Ubah",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Memproses...",
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: url,
+                        type: "POST", // Gunakan POST karena update status
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil!",
+                                text: response.message || "Status slider berhasil diperbarui.",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            table.ajax.reload(); // Reload DataTables agar status baru terlihat
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Gagal!",
+                                text: xhr.responseJSON?.message ||
+                                    "Terjadi kesalahan saat mengubah status.",
+                                showConfirmButton: true
+                            });
+                        }
+                    });
+                }
+            });
         }
     </script>
 @endpush

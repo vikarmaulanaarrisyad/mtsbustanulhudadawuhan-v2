@@ -15,8 +15,13 @@ class Berita extends Model
         return $this->belongsTo(Kategori::class);
     }
 
-    protected function aktif(Builder $query): void
+    public function komentars()
     {
-        $query->where('active', 1);
+        return $this->hasMany(Komentar::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

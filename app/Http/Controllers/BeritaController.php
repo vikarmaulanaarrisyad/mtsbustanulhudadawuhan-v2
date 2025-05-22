@@ -29,6 +29,24 @@ class BeritaController extends Controller
             ->editColumn('published_at', function ($q) {
                 return tanggal_indonesia($q->published_at, true, true);
             })
+            ->addColumn('is_slider', function ($q) {
+                if ($q->is_slider) {
+                    return '<span class="badge bg-success">Aktif</span>';
+                } else {
+                    return '<span class="badge bg-secondary">Tidak Aktif</span>';
+                }
+            })
+            ->addColumn('status', function ($q) {
+                switch ($q->status) {
+                    case 'publish':
+                        return '<span class="badge bg-success">Publish</span>';
+                    case 'archived':
+                        return '<span class="badge bg-danger">Archived</span>';
+                    case 'draft':
+                    default:
+                        return '<span class="badge bg-warning text-dark">Draft</span>';
+                }
+            })
             ->addColumn('selectAll', function ($q) {
                 return '
                     <div class="form-check form-check-inline">
@@ -60,7 +78,7 @@ class BeritaController extends Controller
                 <button class="btn btn-sm" style="background-color:#36bec9; color:#fff;" title="Star">
                     <i class="fa fa-star"></i>
                 </button>
-                <button class="btn btn-sm" style="background-color:#9e9ea0; color:#fff;" title="Play">
+                <button onclick="updateSlider(`' . route('berita.slider.update', $q->id) . '`)" class="btn btn-sm" style="background-color:#9e9ea0; color:#fff;" title="Play">
                     <i class="fa fa-play"></i>
                 </button>
                 <button class="btn btn-sm" style="background-color:#2b9f4e; color:#fff;" title="View">
@@ -433,5 +451,14 @@ class BeritaController extends Controller
         return response()->json([
             'message' => 'Kategori berita berhasil diperbarui.',
         ], 200);
+    }
+
+    public function updateSlider($id)
+    {
+        $berita = Berita::findOrFail($id);
+        $berita->is_slider = !$berita->is_slider; // Toggle status (misalnya boolean 1/0)
+        $berita->save();
+
+        return response()->json(['message' => 'Status slider berhasil diperbarui.']);
     }
 }

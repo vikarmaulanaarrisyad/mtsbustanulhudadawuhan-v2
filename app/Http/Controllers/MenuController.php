@@ -108,4 +108,24 @@ class MenuController extends Controller
 
         return response()->json($submenus);
     }
+
+    public function getAllMenu()
+    {
+        $menus = Menu::where('menu_parent_id', 0)->get();
+
+        return response()->json([
+            'data' => $menus
+        ]);
+    }
+
+
+    public function getAllSubmenu(Request $request)
+    {
+        $submenus = Menu::where('menu_parent_id', $request->menu_id)->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $submenus
+        ]);
+    }
 }

@@ -24,6 +24,7 @@ return new class extends Migration
             $table->timestamp('published_at')->nullable();
             $table->string('nama_file')->nullable();
             $table->string('file')->nullable();
+            $table->integer('is_slider')->default(0);
             $table->timestamps();
         });
     }

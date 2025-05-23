@@ -20,7 +20,7 @@
     <meta name="format-detection" content="telephone=no">
 
     <!-- FAVICONS ICON ============================================= -->
-    {{--  <link rel="icon" href="{{ asset('template') }}/assets/images/favicon.ico" type="image/x-icon" />  --}}
+    <link rel="icon" href="{{ $setting->favicon }}" type="image/x-icon" />
     <link rel="shortcut icon" type="image/x-icon" href="{{ $setting->favicon }}" />
 
     <!-- PAGE TITLE HERE ============================================= -->

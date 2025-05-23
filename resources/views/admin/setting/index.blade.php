@@ -51,14 +51,13 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-4">
                             <div class="form-group">
-                                <label for="deskripsi">Deskripsi Singkat</label>
-                                {{--  <input type="text" class="form-control @error('deskripsi') is-invalid @enderror"
-                                        name="deskripsi" id="deskripsi" value="{{ old('deskripsi') ?? $setting->deskripsi }}">  --}}
-                                <textarea class="form-control summernote @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"
-                                    rows="5">{{ old('deskripsi') ?? $setting->deskripsi }}</textarea>
-                                @error('deskripsi')
+                                <label for="nama_aplikasi">Nama Aplikasi</label>
+                                <input type="text" class="form-control @error('nama_aplikasi') is-invalid @enderror"
+                                    name="nama_aplikasi" id="nama_aplikasi"
+                                    value="{{ old('nama_aplikasi') ?? $setting->nama_aplikasi }}">
+                                @error('nama_aplikasi')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>

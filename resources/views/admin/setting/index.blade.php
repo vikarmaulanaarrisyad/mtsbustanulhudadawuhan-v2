@@ -51,13 +51,23 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-3">
                             <div class="form-group">
                                 <label for="nama_aplikasi">Nama Aplikasi</label>
                                 <input type="text" class="form-control @error('nama_aplikasi') is-invalid @enderror"
                                     name="nama_aplikasi" id="nama_aplikasi"
                                     value="{{ old('nama_aplikasi') ?? $setting->nama_aplikasi }}">
                                 @error('nama_aplikasi')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label for="singkatan">Nama Singkatan Aplikasi</label>
+                                <input type="text" class="form-control @error('singkatan') is-invalid @enderror"
+                                    name="singkatan" id="singkatan" value="{{ old('singkatan') ?? $setting->singkatan }}">
+                                @error('singkatan')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                 @enderror
                             </div>
@@ -75,7 +85,7 @@
                     </div>
 
                     <div class="row mt-4">
-                        <div class="col-lg-3">
+                        <div class="col-lg-2">
                             <div class="form-group text-center">
                                 <label for="logo">Logo</label><br>
                                 @if ($setting->logo)
@@ -89,8 +99,22 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-lg-2">
+                            <div class="form-group text-center">
+                                <label for="login_background">Login Background</label><br>
+                                @if ($setting->login_background)
+                                    <img src="{{ asset('storage/' . $setting->login_background) }}"
+                                        class="img-thumbnail mb-2" style="max-height: 100px;">
+                                @endif
+                                <input type="file" class="form-control @error('login_background') is-invalid @enderror"
+                                    name="login_background" id="login_background">
+                                @error('login_background')
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
+                            </div>
+                        </div>
 
-                        <div class="col-lg-3">
+                        <div class="col-lg-2">
                             <div class="form-group text-center">
                                 <label for="logo_login">Logo Login</label><br>
                                 @if ($setting->logo_login)
@@ -126,7 +150,8 @@
                                     <img src="{{ asset('storage/' . $setting->background_image) }}"
                                         class="img-thumbnail mb-2" style="max-height: 100px;">
                                 @endif
-                                <input type="file" class="form-control @error('background_image') is-invalid @enderror"
+                                <input type="file"
+                                    class="form-control @error('background_image') is-invalid @enderror"
                                     name="background_image" id="background">
                                 @error('background_image')
                                     <span class="invalid-feedback">{{ $message }}</span>

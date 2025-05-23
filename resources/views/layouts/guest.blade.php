@@ -47,7 +47,7 @@
         }
 
         .bg-image {
-            background-image: url('{{ asset('/images/hero-img.png') }}');
+            background-image: url('{{ Storage::url($setting->login_background) }}');
             background-size: cover;
             background-position: center;
         }

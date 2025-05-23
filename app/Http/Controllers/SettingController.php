@@ -72,7 +72,7 @@ class SettingController extends Controller
             ], 422);
         }
 
-        $data = $request->except('favicon', 'logo_login', 'logo', 'background');
+        $data = $request->except('favicon', 'logo_login', 'logo', 'background_image', 'login_background');
 
         if ($request->hasFile('logo') && $setting->logo) {
             if (Storage::disk('public')->exists($setting->logo)) {
@@ -104,6 +104,14 @@ class SettingController extends Controller
             }
 
             $data['background_image'] = upload('setting', $request->file('background_image'), 'setting');
+        }
+
+        if ($request->hasFile('login_background') && $setting->login_background) {
+            if (Storage::disk('public')->exists($setting->login_background)) {
+                Storage::disk('public')->delete($setting->login_background);
+            }
+
+            $data['login_background'] = upload('setting', $request->file('login_background'), 'setting');
         }
 
         $setting->update($data);

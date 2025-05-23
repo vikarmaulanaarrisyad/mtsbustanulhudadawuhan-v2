@@ -3,8 +3,7 @@
 @section('content')
     <div class="page-content bg-white">
         <!-- inner page banner -->
-        <div class="page-banner ovbl-dark pt-4"
-            style="background-image:url({{ asset('template') }}/assets/images/banner/banner2.jpg);">
+        <div class="page-banner ovbl-dark pt-4" style="background-image:url({{ Storage::url($setting->background_image) }});">
             <div class="container">
                 <div class="page-banner-entry">
                     {{--  <h1 class="text-white">Blog Details</h1>  --}}

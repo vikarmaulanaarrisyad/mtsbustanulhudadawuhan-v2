@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('logo_login')->default('default.png');
             $table->string('favicon')->default('default.png');
             $table->string('background_image')->default('default.png');
+            $table->string('login_background')->default('default.png');
             $table->timestamps();
         });
     }

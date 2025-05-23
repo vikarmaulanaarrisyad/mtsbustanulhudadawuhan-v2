@@ -116,8 +116,7 @@
 
                 {{-- Users & Permissions --}}
                 <li class="nav-item">
-                    <a href="#"
-                        class="nav-link {{ request()->is('admin/users*', 'admin/roles*') ? 'active' : '' }}">
+                    <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
                             Pengguna & Hak Akses
@@ -126,13 +125,13 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                            <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Admin</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link {{ request()->routeIs('roles.*') ? 'active' : '' }}">
+                            <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Role & Permission</p>
                             </a>
@@ -142,7 +141,7 @@
 
                 {{-- Pengaturan Website --}}
                 <li class="nav-item">
-                    <a href="#" class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
+                    <a href="{{ route('setting.index') }}" class="nav-link">
                         <i class="nav-icon fas fa-cogs"></i>
                         <p>Pengaturan Website</p>
                     </a>

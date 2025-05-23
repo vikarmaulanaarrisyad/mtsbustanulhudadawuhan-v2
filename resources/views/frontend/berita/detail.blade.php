@@ -43,7 +43,28 @@
                                     <h5 class="post-title"><a href="#">{{ $berita->judul }}</a></h5>
                                     <p class="text-justify">
                                         {!! $berita->isi !!}
+
+                                        @if ($berita->file)
+                                            <br>
+                                            <a href="{{ Storage::url($berita->file) }}" class="btn btn-sm btn-primary mt-2"
+                                                target="_blank" download>
+                                                <i class="fa fa-download"></i> Download Lampiran
+                                            </a>
+                                        @endif
+
+                                        @if ($berita->file && Str::endsWith($berita->file, '.pdf'))
+                                            <div class="mt-4">
+                                                <h6>Preview PDF:</h6>
+                                                <iframe src="{{ Storage::url($berita->file) }}" width="100%"
+                                                    height="600px" style="border: 1px solid #ccc;">
+                                                    This browser does not support PDFs. Please download the PDF to view it:
+                                                    <a href="{{ Storage::url($berita->file) }}">Download PDF</a>
+                                                </iframe>
+                                            </div>
+                                        @endif
+
                                     </p>
+
                                     <div class="ttr-divider bg-gray"><i class="icon-dot c-square"></i></div>
                                     {{--  <div class="widget_tag_cloud">
                                         <h6>TAGS</h6>

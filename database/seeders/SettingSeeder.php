@@ -14,8 +14,12 @@ class SettingSeeder extends Seeder
     {
         $data = [
             'nama_aplikasi' => 'SIAKAD',
+            'nama_madrasah' => 'MTs Bustanul Huda Dawuhan',
+            'nama_yayasan' => 'Bustanul Huda Dawuhan',
             'singkatan' => 'SIAKAD',
-            'copyright' => 'Vikar Maulana'
+            'tentang' => 'SIAKAD',
+            'copyright' => 'Vikar Maulana',
+            'nomorwa' => '08785344234'
         ];
 
         Setting::firstOrCreate(['nama_aplikasi' => $data['nama_aplikasi']], $data);

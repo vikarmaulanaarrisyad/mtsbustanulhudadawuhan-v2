@@ -50,6 +50,10 @@
                         </div>
                     @endforeach
                 </div>
+                <div class="text-center mt-5">
+                    <a href="{{ url('/berita') }}" class="btn btn-primary">Lihat Semua Berita</a>
+                </div>
+
             </div>
         </div>
         <!-- Recent News End -->

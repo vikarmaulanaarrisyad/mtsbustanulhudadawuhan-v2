@@ -1,5 +1,5 @@
 <div class="section-area section-sp2 bg-fix ovbl-dark"
-    style="background-image:url({{ asset('template') }}/assets/images/background/bg1.jpg);">
+    style="background-image:url({{ Storage::url($setting->background_image) }});">
     <div class="container">
         <div class="row">
             <div class="col-md-12 text-white heading-bx left">

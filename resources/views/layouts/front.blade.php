@@ -170,14 +170,50 @@
     <footer>
         <div class="footer-bottom">
             <div class="container">
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 text-center mt-2"> <a target="_blank"
-                            href="#">Develop
-                            By Vikar Maualana</a></div>
+                <div class="row align-items-center">
+                    <div class="col-md-6 text-center text-md-start mt-2">
+                        <a target="_blank" href="#">Develop By Vikar Maulana</a>
+                    </div>
+                    <div class="col-md-6 text-center text-md-end mt-2">
+                        <span>MTS Bustanul Huda Dawuhan</span>
+                    </div>
                 </div>
             </div>
         </div>
     </footer>
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/{{ $setting->nomorwa }}" class="whatsapp-float" target="_blank"
+        title="Chat via WhatsApp">
+        <i class="fa fa-whatsapp whatsapp-icon"></i>
+    </a>
+
+    <!-- Style WhatsApp Button -->
+    <style>
+        .whatsapp-float {
+            position: fixed;
+            bottom: 70px;
+            right: 10px;
+            background-color: #25d366;
+            color: white;
+            border-radius: 50px;
+            padding: 12px 15px;
+            font-size: 24px;
+            z-index: 999;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            text-decoration: none;
+        }
+
+        .whatsapp-float:hover {
+            background-color: #1ebea5;
+            color: white;
+        }
+
+        .whatsapp-icon {
+            margin: 0;
+        }
+    </style>
+
+
     <!-- Footer END ==== -->
     <button class="back-to-top fa fa-chevron-up"></button>
     </div>

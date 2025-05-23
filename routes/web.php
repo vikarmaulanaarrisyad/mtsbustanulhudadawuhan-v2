@@ -6,6 +6,7 @@ use App\Http\Controllers\Frontend\HomePageController;
 use App\Http\Controllers\HalamanController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\MenuController;
+use App\Http\Controllers\SettingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/manifest.json', function () {
@@ -62,6 +63,10 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/halaman/data', [HalamanController::class, 'data'])->name('halaman.data');
         Route::resource('/halaman', HalamanController::class);
         Route::post('/halaman/delete-selected', [HalamanController::class, 'deleteSelected'])->name('halaman.deleteSelected');
+
+        // Pengaturan
+        Route::get('/setting', [SettingController::class, 'data'])->name('setting.data');
+        Route::resource('/setting', SettingController::class);
     });
 });
 Route::get('/', [HomePageController::class, 'index'])->name('homepage.index');

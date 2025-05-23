@@ -14,7 +14,6 @@ class HomePageController extends Controller
     {
         $listBerita = Berita::with('kategori', 'user', 'komentars')->where('status', 'publish')->limit(10)->take(10)->orderBy('published_at', 'desc')->get();
         $sliders = Berita::where('status', 'publish')->where('is_slider', '1')->get();
-        // dd($sliders);
         return view('frontend.homepage.index', compact('listBerita', 'sliders'));
     }
 
@@ -50,6 +49,6 @@ class HomePageController extends Controller
         }
 
         // 3. Jika tidak ditemukan di dua-duanya, tampilkan 404
-        abort(404);
+        return view('not-found');
     }
 }

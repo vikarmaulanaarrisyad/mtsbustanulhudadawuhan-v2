@@ -55,7 +55,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([
             [
                 'menu_title' => 'Visi Misi',
-                'menu_url' => 'about.html',
+                'menu_url' => 'visi-misi',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => $profil,
@@ -63,7 +63,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'Profil Madrasah',
-                'menu_url' => 'admissions.html',
+                'menu_url' => 'profil-madrasah',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => $profil,
@@ -71,7 +71,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'Sambutan',
-                'menu_url' => 'academics.html',
+                'menu_url' => 'sambutan',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => $profil,
@@ -79,7 +79,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'Tenaga Pendidik',
-                'menu_url' => 'academics.html',
+                'menu_url' => 'tenaga-pendidik',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => $profil,
@@ -91,7 +91,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([
             [
                 'menu_title' => 'Ekstrakurikuler',
-                'menu_url' => 'news-details.html',
+                'menu_url' => 'ekstrakurikuler',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => $program,
@@ -99,7 +99,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'Program Madrasah',
-                'menu_url' => 'event-details.html',
+                'menu_url' => 'program-madrasah',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => $program,
@@ -111,7 +111,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([
             [
                 'menu_title' => 'Agenda',
-                'menu_url' => 'news-details.html',
+                'menu_url' => 'agenda',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => $informasi,
@@ -119,7 +119,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'Pengumuman',
-                'menu_url' => 'event-details.html',
+                'menu_url' => 'pengumuman',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => $informasi,
@@ -131,7 +131,7 @@ class MenuSeeder extends Seeder
         DB::table('menus')->insert([
             [
                 'menu_title' => 'Berita',
-                'menu_url' => 'students-life.html',
+                'menu_url' => 'berita',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => 0,
@@ -139,7 +139,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'Fasilitas',
-                'menu_url' => 'news.html',
+                'menu_url' => 'fasilitas',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => 0,
@@ -147,7 +147,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'Prestasi',
-                'menu_url' => 'events.html',
+                'menu_url' => 'prestasi',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => 0,
@@ -155,7 +155,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'Layanan',
-                'menu_url' => 'alumni.html',
+                'menu_url' => 'layanan',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => 0,
@@ -163,7 +163,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'FAQ',
-                'menu_url' => 'alumni.html',
+                'menu_url' => 'faq',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => 0,
@@ -171,7 +171,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'menu_title' => 'PPDB',
-                'menu_url' => 'contact.html',
+                'menu_url' => 'ppdb',
                 'menu_target' => '_self',
                 'menu_type' => 'link',
                 'menu_parent_id' => 0,

@@ -6,29 +6,59 @@
     <!-- Main Slider -->
     <div class="content-block">
 
-        @include('frontend.event.index')
+        <!-- Recent News -->
+        {{--  @include('frontend.berita.index')  --}}
+        <div class="section-area section-sp2">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 heading-bx left">
+                        <h2 class="title-head">Berita <span>Terbaru</span></h2>
+                        {{--  <p>It is a long established fact that a reader will be distracted by the readable
+                            content of a page</p>  --}}
+                    </div>
+                </div>
+                <div class="recent-news-carousel owl-carousel owl-btn-1 col-12 p-lr0">
+
+                    @foreach ($listBerita as $b)
+                        <div class="item">
+                            <div class="recent-news">
+                                <div class="action-box">
+                                    <img src="{{ Storage::url($b->thumbnail) }}" alt="">
+                                </div>
+                                <div class="info-bx">
+                                    <ul class="media-post">
+                                        <li><a href="#"><i
+                                                    class="fa fa-calendar"></i>{{ tanggal_indonesia($b->published_at, true) }}</a>
+                                        </li>
+                                        <li><a href="#"><i class="fa fa-user"></i>By {{ $b->user->name }}</a></li>
+                                    </ul>
+                                    <h5 class="post-title" style="font-size: 18px !important;"><a
+                                            href="{{ route('homepage.detail', $b->slug) }}">
+                                            {{ \Illuminate\Support\Str::limit(strip_tags($b->judul), 200, '...') }}</a></h5>
+                                    <p class="text-justify">
+                                        {{ \Illuminate\Support\Str::limit(strip_tags($b->isi), 100, '...') }}
+                                    </p>
+                                    <div class="post-extra">
+                                        <a href="{{ route('homepage.detail', $b->slug) }}" class="btn-link">READ
+                                            MORE</a>
+                                        <a href="#" class="comments-bx"><i
+                                                class="fa fa-comments-o"></i>{{ $b->komentars->count() }}
+                                            Comment</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <!-- Recent News End -->
 
         <!-- Testimonials -->
         @include('frontend.testimonials.index')
         <!-- Testimonials END -->
+        @include('frontend.event.index')
 
-        <!-- Recent News -->
-        @include('frontend.berita.index')
-        <!-- Recent News End -->
-
-    </div>
-    <!-- contact area END -->
-    <div class="page-banner contact-page">
-        <div class="container">
-            <div class="row m-lr0">
-                <div class="col-lg-12 col-md-12 p-lr0 d-flex">
-                    <iframe
-                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3448.1298878182047!2d-81.38369578541523!3d30.204840081824198!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x88e437ac927a996b%3A0x799695b1a2b970ab!2sNona+Blue+Modern+Tavern!5e0!3m2!1sen!2sin!4v1548177305546"
-                        class="align-self-stretch d-flex" style="width:100%; width:100%; min-height: 300px;"
-                        allowfullscreen></iframe>
-                </div>
-            </div>
-        </div>
     </div>
     <!-- contact area END -->
 @endsection

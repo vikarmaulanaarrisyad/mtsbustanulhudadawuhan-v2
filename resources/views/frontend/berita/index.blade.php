@@ -1,89 +1,104 @@
-<div class="section-area section-sp2">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 heading-bx left">
-                <h2 class="title-head">Berita <span>Terbaru</span></h2>
-                {{--  <p>It is a long established fact that a reader will be distracted by the readable
-                    content of a page</p>  --}}
-            </div>
-        </div>
-        <div class="recent-news-carousel owl-carousel owl-btn-1 col-12 p-lr0">
+@extends('layouts.front')
 
-            @foreach ($listBerita as $b)
-                <div class="item">
-                    <div class="recent-news">
-                        <div class="action-box">
-                            <img src="{{ Storage::url($b->thumbnail) }}" alt="">
-                        </div>
-                        <div class="info-bx">
-                            <ul class="media-post">
-                                <li><a href="#"><i
-                                            class="fa fa-calendar"></i>{{ tanggal_indonesia($b->published_at, true) }}</a>
-                                </li>
-                                <li><a href="#"><i class="fa fa-user"></i>By Admin</a></li>
-                            </ul>
-                            <h5 class="post-title" style="font-size: 18px !important;"><a
-                                    href="{{ route('homepage.detail', $b->slug) }}">{{ $b->judul }}</a></h5>
-                            <p class="text-justify">
-                                {{ \Illuminate\Support\Str::limit(strip_tags($b->isi), 10, '...') }}
-                            </p>
-                            <div class="post-extra">
-                                <a href="#" class="btn-link">READ MORE</a>
-                                <a href="#" class="comments-bx"><i
-                                        class="fa fa-comments-o"></i>{{ $b->komentars->count() }}
-                                    Comment</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-            {{--
-            <div class="item">
-                <div class="recent-news">
-                    <div class="action-box">
-                        <img src="{{ asset('template') }}/assets/images/blog/latest-blog/pic2.jpg"
-                            alt="">
-                    </div>
-                    <div class="info-bx">
-                        <ul class="media-post">
-                            <li><a href="#"><i class="fa fa-calendar"></i>Feb 05 2019</a></li>
-                            <li><a href="#"><i class="fa fa-user"></i>By John</a></li>
-                        </ul>
-                        <h5 class="post-title"><a href="blog-details.html">What Will Education Be Like
-                                In The Next 50 Years?</a></h5>
-                        <p>As desperate as you are right now, you have done everything you can on your.
-                        </p>
-                        <div class="post-extra">
-                            <a href="#" class="btn-link">READ MORE</a>
-                            <a href="#" class="comments-bx"><i class="fa fa-comments-o"></i>14
-                                Comment</a>
-                        </div>
-                    </div>
+@section('content')
+    <!-- Inner Content Box ==== -->
+    <div class="page-content bg-white">
+        <!-- Page Heading Box ==== -->
+        <div class="page-banner ovbl-dark" style="background-image:url({{ Storage::url($setting->background_image) }});">
+            <div class="container">
+                <div class="page-banner-entry">
+                    {{--  <h1 class="text-white">Blog Classic</h1>  --}}
                 </div>
             </div>
-            <div class="item">
-                <div class="recent-news">
-                    <div class="action-box">
-                        <img src="{{ asset('template') }}/assets/images/blog/latest-blog/pic3.jpg"
-                            alt="">
-                    </div>
-                    <div class="info-bx">
-                        <ul class="media-post">
-                            <li><a href="#"><i class="fa fa-calendar"></i>April 14 2019</a></li>
-                            <li><a href="#"><i class="fa fa-user"></i>By George</a></li>
-                        </ul>
-                        <h5 class="post-title"><a href="blog-details.html">Master The Skills Of
-                                Education And Be.</a></h5>
-                        <p>You will see in the guide all my years of valuable experience together with.
-                        </p>
-                        <div class="post-extra">
-                            <a href="#" class="btn-link">READ MORE</a>
-                            <a href="#" class="comments-bx"><i class="fa fa-comments-o"></i>23
-                                Comment</a>
-                        </div>
-                    </div>
-                </div>
-            </div>  --}}
         </div>
+        <div class="breadcrumb-row">
+            <div class="container">
+                <ul class="list-inline">
+                    <li><a href="{{ url('/') }}">Beranda</a></li>
+                    <li>Berita Madrasah</li>
+                </ul>
+            </div>
+        </div>
+        <!-- Page Heading Box END ==== -->
+        <!-- Page Content Box ==== -->
+        <div class="content-block">
+            <!-- Blog Grid ==== -->
+            <div class="section-area section-sp1">
+                <div class="container">
+                    <div class="ttr-blog-grid-3 row" id="masonry">
+                        @foreach ($listBerita as $b)
+                            <div class="post action-card col-lg-4 col-md-6 col-sm-12 col-xs-12 m-b40">
+                                <div class="recent-news">
+                                    <div class="action-box">
+                                        <img src="{{ Storage::url($b->thumbnail) }}" alt="">
+                                    </div>
+                                    <div class="info-bx">
+                                        <ul class="media-post">
+                                            <li>
+                                                <a href="#"><i class="fa fa-calendar"></i>
+                                                    {{ tanggal_indonesia($b->published_at, true) }}</a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fa fa-user"></i> By {{ $b->user->name }}</a>
+                                            </li>
+                                        </ul>
+                                        <h5 class="post-title" style="font-size: 18px !important;">
+                                            <a href="{{ route('homepage.detail', $b->slug) }}">
+                                                {{ \Illuminate\Support\Str::limit(strip_tags($b->judul), 200, '...') }}
+                                            </a>
+                                        </h5>
+                                        <p class="text-justify">
+                                            {{ \Illuminate\Support\Str::limit(strip_tags($b->isi), 100, '...') }}
+                                        </p>
+                                        <div class="post-extra">
+                                            <a href="{{ route('homepage.detail', $b->slug) }}" class="btn-link">READ
+                                                MORE</a>
+                                            <a href="#" class="comments-bx">
+                                                <i class="fa fa-comments-o"></i> {{ $b->komentars->count() }} Komentar
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+
+                    <!-- Pagination ==== -->
+                    @if ($listBerita->hasPages())
+                        <div class="pagination-bx rounded-sm gray clearfix">
+                            <ul class="pagination">
+                                {{-- Previous Page Link --}}
+                                @if ($listBerita->onFirstPage())
+                                    <li class="previous disabled"><span><i class="ti-arrow-left"></i> Prev</span></li>
+                                @else
+                                    <li class="previous"><a href="{{ $listBerita->previousPageUrl() }}"><i
+                                                class="ti-arrow-left"></i> Prev</a></li>
+                                @endif
+
+                                {{-- Pagination Elements --}}
+                                @foreach ($listBerita->getUrlRange(1, $listBerita->lastPage()) as $page => $url)
+                                    @if ($page == $listBerita->currentPage())
+                                        <li class="active"><a href="#">{{ $page }}</a></li>
+                                    @else
+                                        <li><a href="{{ $url }}">{{ $page }}</a></li>
+                                    @endif
+                                @endforeach
+
+                                {{-- Next Page Link --}}
+                                @if ($listBerita->hasMorePages())
+                                    <li class="next"><a href="{{ $listBerita->nextPageUrl() }}">Next <i
+                                                class="ti-arrow-right"></i></a></li>
+                                @else
+                                    <li class="next disabled"><span>Next <i class="ti-arrow-right"></i></span></li>
+                                @endif
+                            </ul>
+                        </div>
+                    @endif
+                    <!-- Pagination END ==== -->
+                </div>
+            </div>
+            <!-- Blog Grid END ==== -->
+        </div>
+        <!-- Page Content Box END ==== -->
     </div>
-</div>
+@endsection

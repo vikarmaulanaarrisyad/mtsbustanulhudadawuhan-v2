@@ -11,17 +11,17 @@
     <meta name="robots" content="" />
 
     <!-- DESCRIPTION -->
-    <meta name="description" content="EduChamp : Education HTML Template" />
+    <meta name="description" content="{{ $setting->nama_aplikasi }}" />
 
     <!-- OG -->
-    <meta property="og:title" content="EduChamp : Education HTML Template" />
-    <meta property="og:description" content="EduChamp : Education HTML Template" />
+    <meta property="og:title" content="{{ $setting->nama_aplikasi }}" />
+    <meta property="og:description" content="{{ $setting->nama_aplikasi }}" />
     <meta property="og:image" content="" />
     <meta name="format-detection" content="telephone=no">
 
     <!-- FAVICONS ICON ============================================= -->
     <link rel="icon" href="{{ asset('template') }}/assets/images/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('template') }}/assets/images/favicon.png" />
+    <link rel="shortcut icon" type="image/x-icon" href="{{ $setting->favicon }}" />
 
     <!-- PAGE TITLE HERE ============================================= -->
     <title>{{ $setting->nama_aplikasi }} </title>
@@ -98,8 +98,8 @@
                         <!-- Navigation Menu ==== -->
                         <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
                             <div class="menu-logo">
-                                <a href="{{ url('/') }}"><img
-                                        src="{{ asset('template') }}/assets/images/logo.png" alt=""></a>
+                                <a href="{{ url('/') }}"><img src="{{ asset('images/logo.png') }}"
+                                        alt=""></a>
                             </div>
 
                             <ul class="nav navbar-nav">

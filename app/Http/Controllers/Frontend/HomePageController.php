@@ -20,6 +20,12 @@ class HomePageController extends Controller
 
     public function detail($slug)
     {
+        // 0. Jika slug adalah 'berita', tampilkan semua berita
+        if ($slug === 'berita') {
+            $listBerita = Berita::latest()->paginate(12); // bisa juga pakai ->get() jika tidak perlu pagination
+            return view('frontend.berita.index', compact('listBerita'));
+        }
+
         // 1. Coba cari slug di tabel berita dulu
         $berita = Berita::where('slug', $slug)->first();
 

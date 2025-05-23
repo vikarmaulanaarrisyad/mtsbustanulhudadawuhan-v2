@@ -71,7 +71,7 @@
                             data-paddingright="[0,0,0,0]" data-paddingbottom="[20,0,0,0]"
                             data-paddingleft="[0,0,0,0]"
                             style="z-index: 7; text-transform:capitalize; white-space: unset; color:#fff; font-family:rubik; font-size:18px; line-height:28px; font-weight:400;">
-                            {{ \Illuminate\Support\Str::words(strip_tags($s->isi), 10, '...') }}
+                            {{ \Illuminate\Support\Str::limit(strip_tags($s->isi), 20, '...') }}
 
                         </div>
                         <!-- LAYER NR. 4 -->

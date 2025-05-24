@@ -1,10 +1,78 @@
 @extends('layouts.front')
 
+@push('css')
+    <style>
+        .breaking-news-container {
+            display: flex;
+            align-items: center;
+            background-color: #d9534f;
+            color: #fff;
+            overflow: hidden;
+            height: 45px;
+            font-size: 15px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .breaking-news-label {
+            background-color: #b52a1c;
+            padding: 0 12px;
+            white-space: nowrap;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+
+        .breaking-news-content {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .news-marquee {
+            display: inline-block;
+            white-space: nowrap;
+            padding-left: 100%;
+            animation: marquee 20s linear infinite;
+        }
+
+        .news-marquee span {
+            display: inline-block;
+            padding-right: 100%;
+        }
+
+        @keyframes marquee {
+            0% {
+                transform: translateX(0%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+    </style>
+@endpush
+
+
 @section('content')
     <!-- Main Slider -->
     @include('frontend.sliders.index')
     <!-- Main Slider -->
     <div class="content-block">
+        <!-- Teks berjalan modern -->
+        <!-- Breaking News Bar -->
+        <div class="breaking-news-container mb-3">
+            <div class="breaking-news-label">Breaking News</div>
+            <div class="breaking-news-content">
+                <div class="news-marquee">
+                    <span>
+                        📰 Selamat datang di website kami! Simak terus update berita terbaru setiap hari.
+                        🗞️ Jangan lewatkan informasi menarik lainnya hanya di sini!
+                        📢 Ikuti kami di sosial media untuk update terkini!
+                    </span>
+                </div>
+            </div>
+        </div>
 
         <!-- Recent News -->
         {{--  @include('frontend.berita.index')  --}}

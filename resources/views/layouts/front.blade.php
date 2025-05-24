@@ -54,6 +54,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('template') }}/assets/vendors/revolution/css/settings.css">
     <link rel="stylesheet" type="text/css" href="{{ asset('template') }}/assets/vendors/revolution/css/navigation.css">
     <!-- REVOLUTION SLIDER END -->
+
+    @stack('css')
 </head>
 
 <body id="bg">

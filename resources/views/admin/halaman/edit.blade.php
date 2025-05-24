@@ -1,15 +1,15 @@
 @extends('layouts.app')
 
-@section('title', 'Edit Artikel')
+@section('title', 'Edit Halaman')
 
 @section('breadcrumb')
     <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-    <li class="breadcrumb-item"><a href="{{ route('berita.index') }}">Daftar Artikel</a></li>
+    <li class="breadcrumb-item"><a href="{{ route('halaman.index') }}">Daftar Halaman</a></li>
     <li class="breadcrumb-item active">@yield('title')</li>
 @endsection
 
 @section('content')
-    <form id="form-artikel" enctype="multipart/form-data">
+    <form id="form-halaman" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="row">
@@ -18,47 +18,30 @@
                 <x-card>
                     <x-slot name="header">
                         <div class="d-flex justify-content-between align-items-center">
-                            <span><i class="fas fa-edit"></i> Edit Artikel</span>
-                            <a href="{{ route('berita.index') }}" class="btn btn-sm btn-warning">
+                            <span><i class="fas fa-edit"></i> Edit Halaman</span>
+                            <a href="{{ route('halaman.index') }}" class="btn btn-sm btn-warning">
                                 <i class="fas fa-arrow-left"></i> Kembali
                             </a>
                         </div>
                     </x-slot>
 
                     <div class="mb-3">
-                        <label for="judul" class="form-label fw-semibold">Judul Artikel</label>
+                        <label for="judul" class="form-label fw-semibold">Judul Halaman</label>
                         <input id="judul" name="judul" type="text" class="form-control"
-                            value="{{ old('judul', $berita->judul) }}" placeholder="Masukkan judul artikel"
+                            value="{{ old('judul', $halaman->judul) }}" placeholder="Masukkan judul halaman"
                             autocomplete="off">
                     </div>
 
                     <div class="mb-3">
-                        <label for="summernote" class="form-label fw-semibold">Isi Artikel</label>
+                        <label for="summernote" class="form-label fw-semibold">Isi</label>
                         <textarea id="summernote" name="isi" class="form-control summernote" rows="20" cols="20"
-                            placeholder="Tulis isi artikel di sini...">{{ old('isi', $berita->isi) }}</textarea>
+                            placeholder="Tulis isi di sini...">{{ old('isi', $halaman->isi) }}</textarea>
                     </div>
                 </x-card>
             </div>
 
             <!-- Kolom Kanan -->
             <div class="col-lg-4">
-                <x-card>
-                    <x-slot name="header">
-                        <strong><i class="fas fa-image"></i> Thumbnail</strong>
-                    </x-slot>
-
-                    <div class="mb-3">
-                        <label for="thumbnail" class="form-label">Unggah Gambar</label>
-                        <input type="file" name="thumbnail" id="thumbnail" class="form-control">
-                    </div>
-                    <div class="text-center">
-                        <img id="preview-thumbnail"
-                            src="{{ $berita->thumbnail ? asset('storage/' . $berita->thumbnail) : '#' }}"
-                            class="img-thumbnail {{ $berita->thumbnail ? '' : 'd-none' }} mt-2" style="max-height: 200px;"
-                            alt="Preview thumbnail">
-                    </div>
-                </x-card>
-
                 <x-card>
                     <x-slot name="header">
                         <strong><i class="fas fa-cogs"></i> Pengaturan Tambahan</strong>
@@ -68,11 +51,11 @@
                         <label for="file" class="form-label">Dokumen Lampiran</label>
                         <input type="file" name="file" id="file" class="form-control">
                         @php
-                            $namaFile = $berita->file ? basename($berita->file) : null;
+                            $namaFile = $halaman->file ? basename($halaman->file) : null;
                         @endphp
 
-                        @if ($berita->file)
-                            donwload file : <a href="{{ asset('storage/' . $berita->file) }}" download>
+                        @if ($halaman->file)
+                            donwload file : <a href="{{ asset('storage/' . $halaman->file) }}" download>
                                 {{ $namaFile }}</a>
                         @else
                             <p>Tidak ada file</p>
@@ -82,7 +65,7 @@
                     <div class="mb-2">
                         <label for="nama_file" class="form-label">Nama Dokumen</label>
                         <input type="text" name="nama_file" id="nama_file" class="form-control"
-                            value="{{ old('nama_file', $berita->nama_file) }}" placeholder="Contoh: Panduan.pdf">
+                            value="{{ old('nama_file', $halaman->nama_file) }}" placeholder="Contoh: Panduan.pdf">
                         <small class="text-muted">Nama ini akan tampil sebagai link download.</small>
                     </div>
 
@@ -90,9 +73,9 @@
                         <label for="status">Status</label>
                         <select id="status" class="form-control" name="status">
                             <option disabled>Pilih salah satu</option>
-                            <option value="publish" {{ $berita->status == 'publish' ? 'selected' : '' }}>Publik</option>
-                            <option value="arsip" {{ $berita->status == 'arsip' ? 'selected' : '' }}>Arsip</option>
-                            <option value="draft" {{ $berita->status == 'draft' ? 'selected' : '' }}>Draft</option>
+                            <option value="publish" {{ $halaman->status == 'publish' ? 'selected' : '' }}>Publik</option>
+                            <option value="arsip" {{ $halaman->status == 'arsip' ? 'selected' : '' }}>Arsip</option>
+                            <option value="draft" {{ $halaman->status == 'draft' ? 'selected' : '' }}>Draft</option>
                         </select>
                     </div>
 
@@ -101,7 +84,7 @@
                         <div class="input-group datetimepicker" id="published_at" data-target-input="nearest">
                             <input type="text" name="published_at" class="form-control datetimepicker-input"
                                 data-target="#published_at" data-toggle="datetimepicker" autocomplete="off"
-                                value="{{ old('published_at', $berita->published_at) }}" />
+                                value="{{ old('published_at', $halaman->published_at) }}" />
                             <div class="input-group-append" data-target="#published_at" data-toggle="datetimepicker">
                                 <div class="input-group-text"><i class="fa fa-calendar"></i></div>
                             </div>
@@ -122,26 +105,8 @@
 
 @push('scripts')
     <script>
-        // Preview Gambar
-        document.getElementById('thumbnail').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            const preview = document.getElementById('preview-thumbnail');
-
-            if (file && file.type.startsWith('image/')) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    preview.src = e.target.result;
-                    preview.classList.remove('d-none');
-                }
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = '#';
-                preview.classList.add('d-none');
-            }
-        });
-
         // AJAX Update Artikel
-        $('#form-artikel').on('submit', function(e) {
+        $('#form-halaman').on('submit', function(e) {
             e.preventDefault();
 
             Swal.fire({
@@ -156,7 +121,7 @@
             let formData = new FormData(this);
 
             $.ajax({
-                url: '{{ route('berita.update', $berita->id) }}',
+                url: '{{ route('halaman.update', $halaman->id) }}',
                 method: 'POST',
                 data: formData,
                 processData: false,
@@ -165,11 +130,11 @@
                     Swal.fire({
                         icon: 'success',
                         title: 'Berhasil!',
-                        text: 'Artikel berhasil diperbarui.',
+                        text: 'Halaman berhasil diperbarui.',
                         timer: 2000,
                         showConfirmButton: false
                     }).then(() => {
-                        window.location.href = '{{ route('berita.index') }}';
+                        window.location.href = '{{ route('halaman.index') }}';
                     });
                 },
                 error: function(xhr) {

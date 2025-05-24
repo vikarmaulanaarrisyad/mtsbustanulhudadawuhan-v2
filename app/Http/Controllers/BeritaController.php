@@ -99,78 +99,6 @@ class BeritaController extends Controller
      * Store a newly created resource in storage.
      */
 
-    // public function store(Request $request)
-    // {
-    //     $validator = Validator::make($request->all(), [
-    //         'judul'        => 'required|string|max:255',
-    //         'isi'          => 'required|string',
-    //         'status'       => 'required',
-    //         'thumbnail'    => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
-    //         'file'         => 'nullable|mimes:pdf,doc,docx,xls,xlsx,zip|max:5120',
-    //         'nama_file'    => 'nullable|string|max:255',
-    //     ]);
-
-    //     if ($validator->fails()) {
-    //         return response()->json([
-    //             'status'  => 'error',
-    //             'errors'  => $validator->errors(),
-    //             'message' => 'Maaf, inputan yang Anda masukkan salah. Silakan periksa kembali dan coba lagi.',
-    //         ], 422);
-    //     }
-
-    //     // Proses gambar base64 di konten `isi`
-    //     $isi = $request->isi;
-    //     $dom = new DOMDocument();
-    //     libxml_use_internal_errors(true);
-    //     $dom->loadHTML($isi, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-    //     libxml_clear_errors();
-
-    //     $images = $dom->getElementsByTagName('img');
-    //     foreach ($images as $img) {
-    //         $src = $img->getAttribute('src');
-
-    //         // Cek jika gambar adalah base64
-    //         if (preg_match('/^data:image\/(\w+);base64,/', $src, $type)) {
-    //             $data = substr($src, strpos($src, ',') + 1);
-    //             $data = base64_decode($data);
-    //             $extension = strtolower($type[1]);
-
-    //             if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
-    //                 continue;
-    //             }
-
-    //             $filename = Str::random(20) . '.' . $extension;
-    //             $path = 'images/' . $filename;
-    //             Storage::disk('public')->put($path, $data);
-
-    //             $img->setAttribute('src', asset('storage/' . $path));
-    //         }
-    //     }
-
-    //     // Simpan kembali isi yang sudah diproses
-    //     $isiFinal = $dom->saveHTML();
-
-    //     $data = [
-    //         'user_id' => Auth::user()->id,
-    //         'kategori_id' => $request->kategori_id,
-    //         'judul'     => $request->judul,
-    //         'status'     => $request->status,
-    //         'ringkasan'     => $request->judul,
-    //         'isi'       => $isiFinal,
-    //         'slug'      => Str::slug($request->judul),
-    //         'thumbnail' => $request->hasFile('thumbnail') ? upload('berita', $request->thumbnail, 'thumbnail') : null,
-    //         'file'      => $request->hasFile('file') ? upload('file', $request->file, $request->nama_file) : null,
-    //         'published_at' => $request->published_at,
-    //         'nama_file' => $request->nama_file,
-    //     ];
-
-    //     Berita::create($data);
-
-    //     return response()->json([
-    //         'message' => 'Berita berhasil simpan',
-    //     ], 200);
-    // }
-
     public function store(Request $request)
     {
         // Cek validasi awal
@@ -222,7 +150,7 @@ class BeritaController extends Controller
                 if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) continue;
 
                 $filename = Str::random(20) . '.' . $extension;
-                $path = 'images/' . $filename;
+                $path = 'images/berita/' . $filename;
                 Storage::disk('public')->put($path, $data);
                 $img->setAttribute('src', asset('storage/' . $path));
             }
@@ -355,7 +283,7 @@ class BeritaController extends Controller
                 }
 
                 $filename = Str::random(20) . '.' . $extension;
-                $path = 'images/' . $filename;
+                $path = 'images/berita/' . $filename;
                 Storage::disk('public')->put($path, $data);
 
                 $img->setAttribute('src', asset('storage/' . $path));

@@ -122,7 +122,7 @@ class HalamanController extends Controller
                 }
 
                 $filename = Str::random(20) . '.' . $extension;
-                $path = 'halaman/' . $filename;
+                $path = 'images/halaman/' . $filename;
                 Storage::disk('public')->put($path, $data);
 
                 $img->setAttribute('src', asset('storage/' . $path));
@@ -161,32 +161,217 @@ class HalamanController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Halaman $halaman)
+    public function edit($id)
     {
-        //
+        $halaman = Halaman::findOrfail($id);
+
+        return view('admin.halaman.edit', compact('halaman'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Halaman $halaman)
+    public function update(Request $request, $id)
     {
-        //
+        $query = Halaman::findOrfail($id);
+
+        $validator = Validator::make($request->all(), [
+            'judul'        => 'required|string|max:255',
+            'isi'          => 'required|string',
+            'status'       => 'required',
+            'file'         => 'nullable|mimes:pdf,doc,docx,xls,xlsx,zip|max:5120',
+            'nama_file'    => 'nullable|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status'  => 'error',
+                'errors'  => $validator->errors(),
+                'message' => 'Maaf, inputan yang Anda masukkan salah. Silakan periksa kembali dan coba lagi.',
+            ], 422);
+        }
+
+        // Ambil isi lama dari database dan ekstrak gambar
+        $isiLama = $query->isi;
+        $gambarLama = [];
+
+        if ($isiLama) {
+            $domLama = new DOMDocument();
+            libxml_use_internal_errors(true);
+            $domLama->loadHTML($isiLama, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+            libxml_clear_errors();
+
+            $gambarLamaTags = $domLama->getElementsByTagName('img');
+            foreach ($gambarLamaTags as $img) {
+                $src = $img->getAttribute('src');
+                if (strpos($src, '/storage/') !== false) {
+                    $path = explode('/storage/', $src)[1];
+                    $gambarLama[] = $path;
+                }
+            }
+        }
+
+        // Proses isi baru
+        $isiBaru = $request->isi;
+        $gambarBaru = [];
+
+        $domBaru = new DOMDocument();
+        libxml_use_internal_errors(true);
+        $domBaru->loadHTML($isiBaru, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+
+        $images = $domBaru->getElementsByTagName('img');
+
+        foreach ($images as $img) {
+            $src = $img->getAttribute('src');
+
+            // Jika src adalah gambar lama
+            if (strpos($src, '/storage/') !== false) {
+                $path = explode('/storage/', $src)[1];
+                $gambarBaru[] = $path;
+                continue;
+            }
+
+            // Jika src adalah base64
+            if (preg_match('/^data:image\/(\w+);base64,/', $src, $type)) {
+                $data = substr($src, strpos($src, ',') + 1);
+                $data = base64_decode($data);
+                $extension = strtolower($type[1]);
+
+                if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+                    continue;
+                }
+
+                $filename = Str::random(20) . '.' . $extension;
+                $path = 'images/halaman/' . $filename;
+                Storage::disk('public')->put($path, $data);
+
+                $img->setAttribute('src', asset('storage/' . $path));
+                $gambarBaru[] = $path;
+            }
+        }
+
+        // Hapus gambar lama yang tidak digunakan lagi
+        $gambarYangDihapus = array_diff($gambarLama, $gambarBaru);
+        foreach ($gambarYangDihapus as $path) {
+            if (Storage::disk('public')->exists($path)) {
+                Storage::disk('public')->delete($path);
+            }
+        }
+
+        // Simpan kembali isi yang sudah diproses
+        $isiFinal = $domBaru->saveHTML();
+
+        // Hapus file lampiran lama jika ada file baru
+        if ($request->hasFile('file') && $query->file && Storage::disk('public')->exists($query->file)) {
+            Storage::disk('public')->delete($query->file);
+        }
+
+        // Inisialisasi nilai default
+        $file = $query->file;
+        $nama_file = $query->nama_file;
+
+        // Jika ada file baru
+        if ($request->hasFile('file')) {
+            // Hapus file lama jika ada
+            if ($query->file && Storage::disk('public')->exists($query->file)) {
+                Storage::disk('public')->delete($query->file);
+            }
+
+            // Upload file baru dengan nama dari request
+            $file = upload('file', $request->file, $request->nama_file);
+            $nama_file = $request->nama_file;
+        }
+
+        $data = [
+            'judul'     => $request->judul,
+            'status'     => $request->status,
+            'isi'       => $isiFinal,
+            'slug'      => Str::slug($request->judul),
+            'file'          => $file,
+            'published_at' => Carbon::now(),
+            'nama_file'     => $nama_file,
+            'status'        => $request->status,
+        ];
+
+        $query->update($data);
+
+        return response()->json([
+            'message' => 'Halaman berhasil simpan',
+        ], 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
+    // public function destroy($id)
+    // {
+    //     $query = Halaman::findOrFail($id);
+
+    //     // Hapus file lampiran jika ada
+    //     if (!empty($query->file)) {
+    //         if (Storage::disk('public')->exists($query->file)) {
+    //             Storage::disk('public')->delete($query->file);
+    //         }
+    //     }
+
+    //     // Hapus gambar di dalam isi konten (summernote)
+    //     $dom = new \DOMDocument();
+    //     libxml_use_internal_errors(true);
+    //     $dom->loadHTML($query->isi, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    //     libxml_clear_errors();
+
+    //     foreach ($dom->getElementsByTagName('img') as $img) {
+    //         $src = $img->getAttribute('src');
+    //         $prefix = asset('storage') . '/';
+
+    //         // Cek apakah gambar berasal dari folder public/storage
+    //         if (strpos($src, $prefix) === 0) {
+    //             $relativePath = str_replace($prefix, '', $src);
+    //             $fullPath = public_path('storage/' . $relativePath);
+    //             if (file_exists($fullPath)) {
+    //                 @unlink($fullPath);
+    //             }
+    //         }
+    //     }
+
+    //     // Hapus data setelah semua gambar terhapus
+    //     $query->delete();
+
+    //     return response()->json(['message' => 'Data berhasil dihapus']);
+    // }
     public function destroy($id)
     {
-        $query = Halaman::findOrfail($id);
+        $query = Halaman::findOrFail($id);
 
+        // Hapus file lampiran jika ada
         if (!empty($query->file)) {
             if (Storage::disk('public')->exists($query->file)) {
                 Storage::disk('public')->delete($query->file);
             }
         }
 
+        // Hapus gambar di dalam konten Summernote
+        $dom = new \DOMDocument();
+        libxml_use_internal_errors(true);
+        $dom->loadHTML($query->isi, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+        libxml_clear_errors();
+
+        foreach ($dom->getElementsByTagName('img') as $img) {
+            $src = $img->getAttribute('src');
+            $prefix = asset('storage/images/halaman') . '/';
+
+            // Jika gambar dari folder images/halaman
+            if (strpos($src, $prefix) === 0) {
+                $relativePath = str_replace(asset('storage') . '/', '', $src); // images/halaman/namafile.jpg
+                $fullPath = public_path('storage/' . $relativePath); // path lengkap ke file
+                if (file_exists($fullPath)) {
+                    @unlink($fullPath);
+                }
+            }
+        }
+
+        // Hapus data dari database
         $query->delete();
 
         return response()->json(['message' => 'Data berhasil dihapus']);

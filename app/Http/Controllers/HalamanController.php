@@ -36,8 +36,26 @@ class HalamanController extends Controller
             ->editColumn('menu', function ($q) {
                 return $q->menu->menu_title ?? '-';
             })
-            ->editColumn('aksi', function () {
-                return '';
+            ->addColumn('status', function ($q) {
+                switch ($q->status) {
+                    case 'publish':
+                        return '<span class="badge bg-success">Publish</span>';
+                    case 'archived':
+                        return '<span class="badge bg-danger">Archived</span>';
+                    case 'draft':
+                    default:
+                        return '<span class="badge bg-warning text-dark">Draft</span>';
+                }
+            })
+            ->editColumn('aksi', function ($q) {
+                return '
+                <a href="' . route('halaman.edit', $q->id) . '" class="btn btn-sm" style="background-color:#ff7f27; color:#fff;" title="Edit">
+                    <i class="fa fa-pencil-alt"></i>
+                </a>
+                <button onclick="deleteData(`' . route('halaman.destroy', $q->id) . '`,`' . $q->judul . '`)" class="btn btn-sm" style="background-color:#d81b60; color:#fff;" title="Delete">
+                    <i class="fa fa-trash"></i>
+                </button>
+                ';
             })
             ->escapeColumns([])
             ->make(true);
@@ -159,9 +177,19 @@ class HalamanController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Halaman $halaman)
+    public function destroy($id)
     {
-        //
+        $query = Halaman::findOrfail($id);
+
+        if (!empty($query->file)) {
+            if (Storage::disk('public')->exists($query->file)) {
+                Storage::disk('public')->delete($query->file);
+            }
+        }
+
+        $query->delete();
+
+        return response()->json(['message' => 'Data berhasil dihapus']);
     }
 
     public function deleteSelected(Request $request)

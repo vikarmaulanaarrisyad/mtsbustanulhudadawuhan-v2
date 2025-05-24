@@ -21,6 +21,8 @@
 
     <!-- FAVICONS ICON ============================================= -->
     <link rel="icon" href="{{ $setting->favicon }}" type="image/x-icon" />
+    <link rel="icon" href="{{ Storage::url($setting->favicon ?? '') }}" type="image/*">
+
     <link rel="shortcut icon" type="image/x-icon" href="{{ $setting->favicon }}" />
 
     <!-- PAGE TITLE HERE ============================================= -->

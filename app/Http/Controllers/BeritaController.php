@@ -72,20 +72,16 @@ class BeritaController extends Controller
                 <button onclick="updateStatus(`' . route('berita.status.update', $q->id) . '`)" class="btn btn-sm" style="background-color:#011c3d; color:#fff;" title="Status">
                     <i class="fa fa-unlock"></i>
                 </button>
-                <button class="btn btn-sm" style="background-color:#cde3f3; color:#000;" title="Chat">
-                    <i class="fa fa-comment"></i>
-                </button>
-
-                <button class="btn btn-sm" style="background-color:#36bec9; color:#fff;" title="Star">
-                    <i class="fa fa-star"></i>
-                </button>
-                <button onclick="updateSlider(`' . route('berita.slider.update', $q->id) . '`)" class="btn btn-sm" style="background-color:#9e9ea0; color:#fff;" title="Play">
+                <button onclick="updateSlider(`' . route('berita.slider.update', $q->id) . '`)" class="btn btn-sm" style="background-color:#9e9ea0; color:#fff;" title="Slider">
                     <i class="fa fa-play"></i>
                 </button>
-                <button class="btn btn-sm" style="background-color:#2b9f4e; color:#fff;" title="View">
-                    <i class="fa fa-eye"></i>
-                </button>
-            ';
+                <a target="_blank" href="' . route('homepage.detail', $q->slug) . '" class="btn btn-sm" style="background-color:#2b9f4e; color:#fff;" title="Lihat">
+                <i class="fa fa-eye"></i>
+                </a>
+                ';
+                // <button class="btn btn-sm" style="background-color:#cde3f3; color:#000;" title="Komentar">
+                //     <i class="fa fa-comment"></i>
+                // </button>
             })
             ->escapeColumns([])
             ->make(true);

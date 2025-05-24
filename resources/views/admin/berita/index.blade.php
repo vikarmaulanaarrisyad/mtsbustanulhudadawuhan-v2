@@ -12,13 +12,17 @@
         <div class="col-lg-12">
             <x-card>
                 <x-slot name="header">
-                    <a href="{{ route('berita.create') }}" class="btn btn-sm btn-primary">
-                        <i class="fas fa-plus-circle"></i> Tambah Berita Baru
-                    </a>
+                    <div class="d-flex flex-wrap justify-content-between align-items-center">
+                        <div class="mb-2">
+                            <a href="{{ route('berita.create') }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus-circle"></i> Tambah Berita Baru
+                            </a>
 
-                    <button id="deleteSelectedBtn" class="btn btn-sm btn-danger ml-2" disabled>
-                        <i class="fas fa-trash"></i> Hapus Data Terpilih
-                    </button>
+                            <button id="deleteSelectedBtn" class="btn btn-sm btn-danger ml-2" disabled>
+                                <i class="fas fa-trash"></i> Hapus Data Terpilih
+                            </button>
+                        </div>
+                    </div>
                 </x-slot>
 
                 <x-table>
@@ -41,6 +45,7 @@
             </x-card>
         </div>
     </div>
+
     @include('admin.berita.update_kategori')
 @endsection
 
@@ -61,6 +66,10 @@
             responsive: true,
             ajax: {
                 url: '{{ route('berita.data') }}',
+                data: function(d) {
+                    d.kategori = $('#filterKategori').val();
+                    d.status = $('#filterStatus').val();
+                }
             },
             columns: [{
                     data: 'selectAll',

@@ -189,6 +189,33 @@
 
     <!-- Style WhatsApp Button -->
     <style>
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .page-wraper {
+            min-height: 90vh;
+            /* full viewport height */
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-wraper>header,
+        .page-wraper>footer {
+            flex-shrink: 0;
+            /* header dan footer jangan mengecil */
+        }
+
+        .page-wraper>.content,
+        /* pastikan yield content dibungkus div .content */
+        .page-wraper>main {
+            flex: 1;
+            /* content mengisi sisa space */
+        }
+
         .whatsapp-float {
             position: fixed;
             bottom: 70px;

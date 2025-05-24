@@ -46,12 +46,18 @@
                     },
                     processResults: function(data) {
                         return {
-                            results: data
+                            results: data.data.map(function(item) {
+                                return {
+                                    id: item.id,
+                                    text: item.nama
+                                };
+                            })
                         };
                     },
                     cache: true
                 }
             });
+
         });
     </script>
 @endpush

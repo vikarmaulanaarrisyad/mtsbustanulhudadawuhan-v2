@@ -29,10 +29,10 @@
                                     value="true">
                             </div>
                         </th>
-                        <th>NO</th>
-                        <th>JUDUL</th>
-                        <th>KATEGORI</th>
-                        <th>DIPOSTING PADA</th>
+                        <th width="2%">NO</th>
+                        <th width="25%">JUDUL</th>
+                        <th width="10%">KATEGORI</th>
+                        <th width="10%">DIPOSTING PADA</th>
                         <th>STATUS</th>
                         <th>SLIDER</th>
                         <th>Aksi</th>
@@ -75,7 +75,8 @@
                     searchable: false
                 },
                 {
-                    data: 'judul'
+                    data: 'judul',
+                    className: 'wrap-text'
                 },
                 {
                     data: 'kategori'
@@ -382,6 +383,54 @@
                                 icon: "success",
                                 title: "Berhasil!",
                                 text: response.message || "Status slider berhasil diperbarui.",
+                                timer: 2000,
+                                showConfirmButton: false
+                            });
+                            table.ajax.reload(); // Reload DataTables agar status baru terlihat
+                        },
+                        error: function(xhr) {
+                            Swal.fire({
+                                icon: "error",
+                                title: "Gagal!",
+                                text: xhr.responseJSON?.message ||
+                                    "Terjadi kesalahan saat mengubah status.",
+                                showConfirmButton: true
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function updateStatus(url) {
+            Swal.fire({
+                title: "Yakin ingin mengubah status?",
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonText: "Ya, Ubah",
+                cancelButtonText: "Batal"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: "Memproses...",
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    $.ajax({
+                        url: url,
+                        type: "POST", // Gunakan POST karena update status
+                        data: {
+                            _token: '{{ csrf_token() }}'
+                        },
+                        success: function(response) {
+                            Swal.fire({
+                                icon: "success",
+                                title: "Berhasil!",
+                                text: response.message || "Status status berhasil diperbarui.",
                                 timer: 2000,
                                 showConfirmButton: false
                             });

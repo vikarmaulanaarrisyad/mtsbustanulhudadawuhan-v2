@@ -21,7 +21,7 @@ class HomePageController extends Controller
     {
         // 0. Jika slug adalah 'berita', tampilkan semua berita
         if ($slug === 'berita') {
-            $listBerita = Berita::latest()->paginate(12); // bisa juga pakai ->get() jika tidak perlu pagination
+            $listBerita = Berita::where('status', 'publish')->latest()->paginate(12); // bisa juga pakai ->get() jika tidak perlu pagination
             return view('frontend.berita.index', compact('listBerita'));
         }
 

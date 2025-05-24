@@ -69,12 +69,13 @@ class BeritaController extends Controller
                 <button onclick="updateKategori(`' . route('berita.show', $q->id) . '`, `' . route('berita.kategori.update', $q->id) . '`)" class="btn btn-sm" style="background-color:#6755a5; color:#fff;" title="Kategori">
                     <i class="fa fa-folder"></i>
                 </button>
+                <button onclick="updateStatus(`' . route('berita.status.update', $q->id) . '`)" class="btn btn-sm" style="background-color:#011c3d; color:#fff;" title="Status">
+                    <i class="fa fa-unlock"></i>
+                </button>
                 <button class="btn btn-sm" style="background-color:#cde3f3; color:#000;" title="Chat">
                     <i class="fa fa-comment"></i>
                 </button>
-                <button class="btn btn-sm" style="background-color:#011c3d; color:#fff;" title="Unlock">
-                    <i class="fa fa-unlock"></i>
-                </button>
+
                 <button class="btn btn-sm" style="background-color:#36bec9; color:#fff;" title="Star">
                     <i class="fa fa-star"></i>
                 </button>
@@ -102,15 +103,91 @@ class BeritaController extends Controller
      * Store a newly created resource in storage.
      */
 
+    // public function store(Request $request)
+    // {
+    //     $validator = Validator::make($request->all(), [
+    //         'judul'        => 'required|string|max:255',
+    //         'isi'          => 'required|string',
+    //         'status'       => 'required',
+    //         'thumbnail'    => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
+    //         'file'         => 'nullable|mimes:pdf,doc,docx,xls,xlsx,zip|max:5120',
+    //         'nama_file'    => 'nullable|string|max:255',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return response()->json([
+    //             'status'  => 'error',
+    //             'errors'  => $validator->errors(),
+    //             'message' => 'Maaf, inputan yang Anda masukkan salah. Silakan periksa kembali dan coba lagi.',
+    //         ], 422);
+    //     }
+
+    //     // Proses gambar base64 di konten `isi`
+    //     $isi = $request->isi;
+    //     $dom = new DOMDocument();
+    //     libxml_use_internal_errors(true);
+    //     $dom->loadHTML($isi, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+    //     libxml_clear_errors();
+
+    //     $images = $dom->getElementsByTagName('img');
+    //     foreach ($images as $img) {
+    //         $src = $img->getAttribute('src');
+
+    //         // Cek jika gambar adalah base64
+    //         if (preg_match('/^data:image\/(\w+);base64,/', $src, $type)) {
+    //             $data = substr($src, strpos($src, ',') + 1);
+    //             $data = base64_decode($data);
+    //             $extension = strtolower($type[1]);
+
+    //             if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
+    //                 continue;
+    //             }
+
+    //             $filename = Str::random(20) . '.' . $extension;
+    //             $path = 'images/' . $filename;
+    //             Storage::disk('public')->put($path, $data);
+
+    //             $img->setAttribute('src', asset('storage/' . $path));
+    //         }
+    //     }
+
+    //     // Simpan kembali isi yang sudah diproses
+    //     $isiFinal = $dom->saveHTML();
+
+    //     $data = [
+    //         'user_id' => Auth::user()->id,
+    //         'kategori_id' => $request->kategori_id,
+    //         'judul'     => $request->judul,
+    //         'status'     => $request->status,
+    //         'ringkasan'     => $request->judul,
+    //         'isi'       => $isiFinal,
+    //         'slug'      => Str::slug($request->judul),
+    //         'thumbnail' => $request->hasFile('thumbnail') ? upload('berita', $request->thumbnail, 'thumbnail') : null,
+    //         'file'      => $request->hasFile('file') ? upload('file', $request->file, $request->nama_file) : null,
+    //         'published_at' => $request->published_at,
+    //         'nama_file' => $request->nama_file,
+    //     ];
+
+    //     Berita::create($data);
+
+    //     return response()->json([
+    //         'message' => 'Berita berhasil simpan',
+    //     ], 200);
+    // }
+
     public function store(Request $request)
     {
+        // Cek validasi awal
         $validator = Validator::make($request->all(), [
-            'judul'        => 'required|string|max:255',
+            'judul'        => 'required|string|max:255|unique:beritas,judul',
             'isi'          => 'required|string',
             'status'       => 'required',
             'thumbnail'    => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'file'         => 'nullable|mimes:pdf,doc,docx,xls,xlsx,zip|max:5120',
             'nama_file'    => 'nullable|string|max:255',
+            'kategori_id'  => 'required',
+        ], [
+            'kategori_id.required' => 'Kategori wajib diisi.'
         ]);
 
         if ($validator->fails()) {
@@ -121,9 +198,21 @@ class BeritaController extends Controller
             ], 422);
         }
 
-        // Proses gambar base64 di konten `isi`
+        // Buat slug dari judul
+        $slug = Str::slug($request->judul);
+
+        // Cek apakah slug sudah digunakan
+        if (Berita::where('slug', $slug)->exists()) {
+            return response()->json([
+                'status' => 'error',
+                'errors' => ['judul' => ['Slug dari judul sudah digunakan, silakan gunakan judul lain.']],
+                'message' => 'Judul sudah digunakan.',
+            ], 422);
+        }
+
+        // Proses isi yang mengandung gambar base64
         $isi = $request->isi;
-        $dom = new DOMDocument();
+        $dom = new \DOMDocument();
         libxml_use_internal_errors(true);
         $dom->loadHTML($isi, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
         libxml_clear_errors();
@@ -131,38 +220,30 @@ class BeritaController extends Controller
         $images = $dom->getElementsByTagName('img');
         foreach ($images as $img) {
             $src = $img->getAttribute('src');
-
-            // Cek jika gambar adalah base64
             if (preg_match('/^data:image\/(\w+);base64,/', $src, $type)) {
-                $data = substr($src, strpos($src, ',') + 1);
-                $data = base64_decode($data);
+                $data = base64_decode(substr($src, strpos($src, ',') + 1));
                 $extension = strtolower($type[1]);
-
-                if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) {
-                    continue;
-                }
+                if (!in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp'])) continue;
 
                 $filename = Str::random(20) . '.' . $extension;
                 $path = 'images/' . $filename;
                 Storage::disk('public')->put($path, $data);
-
                 $img->setAttribute('src', asset('storage/' . $path));
             }
         }
 
-        // Simpan kembali isi yang sudah diproses
         $isiFinal = $dom->saveHTML();
 
         $data = [
-            'user_id' => Auth::user()->id,
-            'kategori_id' => 1,
-            'judul'     => $request->judul,
-            'status'     => $request->status,
-            'ringkasan'     => $request->judul,
-            'isi'       => $isiFinal,
-            'slug'      => Str::slug($request->judul),
+            'user_id' => Auth::id(),
+            'kategori_id' => $request->kategori_id,
+            'judul' => $request->judul,
+            'status' => $request->status,
+            'ringkasan' => $request->judul,
+            'isi' => $isiFinal,
+            'slug' => $slug,
             'thumbnail' => $request->hasFile('thumbnail') ? upload('berita', $request->thumbnail, 'thumbnail') : null,
-            'file'      => $request->hasFile('file') ? upload('file', $request->file, $request->nama_file) : null,
+            'file' => $request->hasFile('file') ? upload('file', $request->file, $request->nama_file) : null,
             'published_at' => $request->published_at,
             'nama_file' => $request->nama_file,
         ];
@@ -170,7 +251,7 @@ class BeritaController extends Controller
         Berita::create($data);
 
         return response()->json([
-            'message' => 'Berita berhasil simpan',
+            'message' => 'Berita berhasil disimpan',
         ], 200);
     }
 
@@ -460,5 +541,15 @@ class BeritaController extends Controller
         $berita->save();
 
         return response()->json(['message' => 'Status slider berhasil diperbarui.']);
+    }
+
+    public function updateStatus($id)
+    {
+        $berita = Berita::findOrFail($id);
+
+        $berita->status = $berita->status === 'publish' ? 'draft' : 'publish';
+        $berita->save();
+
+        return response()->json(['message' => 'Status berita berhasil diperbarui.']);
     }
 }

@@ -56,6 +56,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/berita/data', [BeritaController::class, 'data'])->name('berita.data');
         Route::resource('/berita', BeritaController::class);
         Route::post('/berita/{id}/slider-update', [BeritaController::class, 'updateSlider'])->name('berita.slider.update');
+        Route::post('/berita/{id}/status-update', [BeritaController::class, 'updateStatus'])->name('berita.status.update');
         Route::put('/berita/kategori/update/{id}', [BeritaController::class, 'updateKategori'])->name('berita.kategori.update');
         Route::post('/berita/delete-selected', [BeritaController::class, 'deleteSelected'])->name('berita.deleteSelected');
 

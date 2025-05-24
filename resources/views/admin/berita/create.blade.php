@@ -13,7 +13,7 @@
         @csrf
         <div class="row">
             <!-- Kolom Kiri -->
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <x-card>
                     <x-slot name="header">
                         <div class="d-flex justify-content-between align-items-center">
@@ -39,7 +39,7 @@
             </div>
 
             <!-- Kolom Kanan -->
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <x-card>
                     <x-slot name="header">
                         <strong><i class="fas fa-image"></i> Thumbnail</strong>
@@ -52,6 +52,18 @@
                     <div class="text-center">
                         <img id="preview-thumbnail" src="#" class="img-thumbnail d-none mt-2"
                             style="max-height: 200px;" alt="Preview thumbnail">
+                    </div>
+                </x-card>
+
+                <x-card>
+                    <x-slot name="header">
+                        <strong><i class="fas fa-image"></i> Kategori</strong>
+                    </x-slot>
+
+                    <div class="mb-3">
+                        <label for="thumbnail" class="form-label">Pilih Kategori</label>
+                        <select id="kategori_id" class="form-control select2" name="kategori_id" style="width: 100%;">
+                        </select>
                     </div>
                 </x-card>
 
@@ -107,9 +119,33 @@
 
 @include('includes.summernote')
 @include('includes.datepicker')
+@include('includes.select2')
 
 @push('scripts')
     <script>
+        $(document).ready(function() {
+            // Ajax mengambil kategori_id
+            $.ajax({
+                url: '{{ route('kategori.getAll') }}',
+                method: 'GET',
+                success: function(response) {
+                    $('#kategori_id').append('<option value="">Pilih Kategori</option>');
+                    $.each(response.data, function(index, item) {
+                        $('#kategori_id').append(
+                            `<option value="${item.id}">${item.nama}</option>`
+                        );
+                    });
+                },
+                error: function() {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Gagal Memuat Kategori',
+                        text: 'Terjadi kesalahan saat mengambil data kategori.'
+                    });
+                }
+            });
+        })
+
         // Preview Gambar
         document.getElementById('thumbnail').addEventListener('change', function(e) {
             const file = e.target.files[0];

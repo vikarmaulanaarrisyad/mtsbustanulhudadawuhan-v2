@@ -26,12 +26,12 @@ class KategoriController extends Controller
             $query->where('nama', 'like', "%{$search}%");
         }
 
-        // Ambil data kategori, batasi misal 10 hasil
-        $categories = $query->select('id', 'nama as text')
-            ->limit(10)
-            ->get();
+        // Eksekusi query dan ambil data
+        $categories = $query->select('id', 'nama')->get();
 
-        return response()->json($categories);
+        return response()->json([
+            'data' => $categories
+        ]);
     }
 
     /**

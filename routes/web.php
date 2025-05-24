@@ -50,7 +50,8 @@ Route::group(['middleware' => 'auth'], function () {
         //Kategori
         Route::get('/kategori/data', [KategoriController::class, 'data'])->name('kategori.data');
         Route::get('/kategori/get-all', [KategoriController::class, 'getAll'])->name('kategori.getAll');
-        Route::resource('/kategori', KategoriController::class);
+        Route::resource('/kategori', KategoriController::class)->except('create', 'edit');
+        Route::post('/kategori/delete-selected', [KategoriController::class, 'deleteSelected'])->name('kategori.deleteSelected');
 
         // Berita
         Route::get('/berita/data', [BeritaController::class, 'data'])->name('berita.data');

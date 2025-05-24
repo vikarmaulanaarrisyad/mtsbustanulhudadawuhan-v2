@@ -76,6 +76,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{ route('kategori.index') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Kategori</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{ route('berita.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Berita / Artikel</p>
@@ -87,19 +93,19 @@
                                 <p>Galeri</p>
                             </a>
                         </li>
-                        <li class="nav-item">
+                        {{--  <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Guru & Tenaga Pendidik</p>
                             </a>
-                        </li>
-                        <li class="nav-item">
+                        </li>  --}}
+                        {{--  <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Siswa & Alumni</p>
                             </a>
-                        </li>
-                        <li class="nav-item">
+                        </li>  --}}
+                        {{--  <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Agenda & Pengumuman</p>
@@ -110,12 +116,12 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>PPDB</p>
                             </a>
-                        </li>
+                        </li>  --}}
                     </ul>
                 </li>
 
                 {{-- Users & Permissions --}}
-                <li class="nav-item">
+                {{--  <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-users-cog"></i>
                         <p>
@@ -137,7 +143,7 @@
                             </a>
                         </li>
                     </ul>
-                </li>
+                </li>  --}}
 
                 {{-- Pengaturan Website --}}
                 <li class="nav-item">
@@ -148,12 +154,12 @@
                 </li>
 
                 {{-- Backup & Restore --}}
-                <li class="nav-item">
+                {{--  <li class="nav-item">
                     <a href="#" class="nav-link {{ request()->routeIs('backup.*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-database"></i>
                         <p>Backup & Restore</p>
                     </a>
-                </li>
+                </li>  --}}
             </ul>
         </nav>
     </div>

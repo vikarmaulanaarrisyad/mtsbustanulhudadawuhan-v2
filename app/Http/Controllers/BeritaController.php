@@ -79,9 +79,6 @@ class BeritaController extends Controller
                 <i class="fa fa-eye"></i>
                 </a>
                 ';
-                // <button class="btn btn-sm" style="background-color:#cde3f3; color:#000;" title="Komentar">
-                //     <i class="fa fa-comment"></i>
-                // </button>
             })
             ->escapeColumns([])
             ->make(true);

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EventController;
 use App\Http\Controllers\Frontend\HomePageController;
 use App\Http\Controllers\HalamanController;
 use App\Http\Controllers\KategoriController;
@@ -65,6 +66,11 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/halaman/data', [HalamanController::class, 'data'])->name('halaman.data');
         Route::resource('/halaman', HalamanController::class);
         Route::post('/halaman/delete-selected', [HalamanController::class, 'deleteSelected'])->name('halaman.deleteSelected');
+
+        // Event
+        Route::get('/event/data', [EventController::class, 'data'])->name('event.data');
+        Route::resource('/event', EventController::class);
+        Route::post('/event/{id}/status-update', [EventController::class, 'updateStatus'])->name('event.status.update');
 
         // Pengaturan
         Route::get('/setting', [SettingController::class, 'data'])->name('setting.data');

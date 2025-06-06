@@ -55,7 +55,33 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('template') }}/assets/vendors/revolution/css/navigation.css">
     <!-- REVOLUTION SLIDER END -->
 
+    <style>
+        /* Tambahkan background hitam transparan saat menu muncul di mobile */
+        @media (max-width: 991.98px) {
+            .header-transparent .sticky-header {
+                background-color: rgba(0, 0, 0, 0.8);
+                /* Tetap transparan */
+            }
+
+            .menu-links {
+                background-color: rgba(0, 0, 0, 0.9);
+                backdrop-filter: blur(4px);
+            }
+
+            .menu-links .nav>li>a {
+                color: #fff;
+            }
+
+            /* Logo agar tetap terlihat */
+            .menu-logo img {
+                max-height: 50px;
+                filter: drop-shadow(0 0 2px #000);
+            }
+        }
+    </style>
     @stack('css')
+
+
 </head>
 
 <body id="bg">
@@ -63,31 +89,13 @@
         <div id="loading-icon-bx"></div>
         <!-- Header Top ==== -->
         <header class="header rs-nav header-transparent">
-            <div class="top-bar">
-                <div class="container">
-                    <div class="row d-flex justify-content-between">
-                        <div class="topbar-left">
-                            <ul>
-                                {{--  <li><a href="faq-1.html"><i class="fa fa-question-circle"></i>Ask a Question</a></li>  --}}
-                                {{--  <li><a href="javascript:;"><i class="fa fa-envelope-o"></i>Support@website.com</a></li>  --}}
-                            </ul>
-                        </div>
-                        <div class="topbar-right">
-                            <ul>
-                                <li><a href="{{ route('login') }}">Login</a></li>
-                                {{--  <li><a href="register.html">Register</a></li>  --}}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <div class="sticky-header navbar-expand-lg">
                 <div class="menu-bar clearfix">
                     <div class="container clearfix">
                         <!-- Header Logo ==== -->
                         <div class="menu-logo">
                             <a href="{{ url('/') }}">
-                                <img src="{{ asset('images/logo.png') }}" alt=""></a>
+                                <img src="{{ Storage::url($setting->logo) }}" alt=""></a>
                             {{--  <img src="{{ asset('template') }}/assets/images/logo-white.png" alt=""></a>  --}}
                         </div>
                         <!-- Mobile Nav Button ==== -->
@@ -102,7 +110,7 @@
                         <!-- Navigation Menu ==== -->
                         <div class="menu-links navbar-collapse collapse justify-content-start" id="menuDropdown">
                             <div class="menu-logo">
-                                <a href="{{ url('/') }}"><img src="{{ asset('images/logo.png') }}"
+                                <a href="{{ url('/') }}"><img src="{{ Storage::url($setting->logo) }}"
                                         alt=""></a>
                             </div>
 
@@ -401,6 +409,18 @@
             }
         })
     </script>
+
+    <script>
+        window.addEventListener("scroll", function() {
+            const header = document.querySelector(".sticky-header");
+            if (window.scrollY > 50) {
+                header.classList.add("scrolled");
+            } else {
+                header.classList.remove("scrolled");
+            }
+        });
+    </script>
+
 </body>
 
 </html>

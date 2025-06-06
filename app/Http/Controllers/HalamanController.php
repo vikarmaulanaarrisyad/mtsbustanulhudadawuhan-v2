@@ -22,7 +22,9 @@ class HalamanController extends Controller
 
     public function data()
     {
-        $query = Halaman::with('menu')->orderBy('id', 'desc')->get();
+        $query = Halaman::with('menu')
+            ->orderBy('id', 'desc')
+            ->get();
 
         return datatables($query)
             ->addIndexColumn()
@@ -301,45 +303,6 @@ class HalamanController extends Controller
         ], 200);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    // public function destroy($id)
-    // {
-    //     $query = Halaman::findOrFail($id);
-
-    //     // Hapus file lampiran jika ada
-    //     if (!empty($query->file)) {
-    //         if (Storage::disk('public')->exists($query->file)) {
-    //             Storage::disk('public')->delete($query->file);
-    //         }
-    //     }
-
-    //     // Hapus gambar di dalam isi konten (summernote)
-    //     $dom = new \DOMDocument();
-    //     libxml_use_internal_errors(true);
-    //     $dom->loadHTML($query->isi, LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-    //     libxml_clear_errors();
-
-    //     foreach ($dom->getElementsByTagName('img') as $img) {
-    //         $src = $img->getAttribute('src');
-    //         $prefix = asset('storage') . '/';
-
-    //         // Cek apakah gambar berasal dari folder public/storage
-    //         if (strpos($src, $prefix) === 0) {
-    //             $relativePath = str_replace($prefix, '', $src);
-    //             $fullPath = public_path('storage/' . $relativePath);
-    //             if (file_exists($fullPath)) {
-    //                 @unlink($fullPath);
-    //             }
-    //         }
-    //     }
-
-    //     // Hapus data setelah semua gambar terhapus
-    //     $query->delete();
-
-    //     return response()->json(['message' => 'Data berhasil dihapus']);
-    // }
     public function destroy($id)
     {
         $query = Halaman::findOrFail($id);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
+use App\Models\Event;
 use App\Models\Halaman;
 use App\Models\Kategori;
 use App\Models\Menu;
@@ -18,6 +19,7 @@ class DashboardController extends Controller
         $totalBerita   = Berita::where('status', 'publish')->count();
         $totalMenu     = Menu::count();
         $totalHalaman  = Halaman::count();
+        $totalEvent   = Event::count();
 
         // cek user yang login
         if ($user->hasRole('admin')) {
@@ -26,6 +28,7 @@ class DashboardController extends Controller
                 'totalBerita',
                 'totalMenu',
                 'totalHalaman',
+                'totalEvent'
             ]));
         } else {
             return view('operator.dashboard.index');

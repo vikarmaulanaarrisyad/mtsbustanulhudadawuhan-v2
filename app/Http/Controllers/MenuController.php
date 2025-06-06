@@ -11,7 +11,11 @@ class MenuController extends Controller
 {
     public function index()
     {
-        $menus = Menu::with('children')->orderBy('menu_parent_id')->orderBy('menu_position')->get();
+        $menus = Menu::with('children')
+            ->orderBy('menu_parent_id')
+            ->orderBy('menu_position')
+            ->get();
+
         return view('admin.menu.index', compact('menus'));
     }
 
@@ -104,14 +108,18 @@ class MenuController extends Controller
 
     public function getSubmenu($menu_id)
     {
-        $submenus = Menu::where('menu_parent_id', $menu_id)->get();
+        $submenus = Menu::where('menu_parent_id', $menu_id)
+            ->get();
 
         return response()->json($submenus);
     }
 
     public function getAllMenu()
     {
-        $menus = Menu::where('menu_parent_id', 0)->get();
+        $menus = Menu::where('menu_parent_id', 0)
+            ->where('menu_type', 'pages')
+            ->where('menu_url', '!=', '/')
+            ->get();
 
         return response()->json([
             'data' => $menus

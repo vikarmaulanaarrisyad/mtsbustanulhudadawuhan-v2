@@ -84,13 +84,13 @@
                         <li class="nav-item">
                             <a href="{{ route('berita.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Berita / Artikel</p>
+                                <p>Berita</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{ route('event.index') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Galeri</p>
+                                <p>Event</p>
                             </a>
                         </li>
                         {{--  <li class="nav-item">

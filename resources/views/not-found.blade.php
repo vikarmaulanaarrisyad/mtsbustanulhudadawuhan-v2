@@ -54,9 +54,9 @@
     <div class="page-wraper">
         <div id="loading-icon-bx"></div>
         <div class="account-form">
-            <div class="account-head"
-                style="background-image:url({{ asset('template') }}/assets/images/background/bg2.jpg);">
-                <a href="{{ url('/') }}"><img src="assets/images/logo-white-2.png" alt=""></a>
+            <div class="account-head" style="background-image:url({{ Storage::url($setting->background_image) }});">
+                <a href="{{ url('/') }}"><img src="{{ Storage::url($setting->background_image) }}"
+                        alt=""></a>
             </div>
             <div class="account-form-inner">
                 <div class="account-container">

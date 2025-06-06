@@ -78,6 +78,53 @@
                 filter: drop-shadow(0 0 2px #000);
             }
         }
+
+        .Newspaper-Button {
+            display: none !important;
+        }
+
+        @media (min-width: 1024px) {
+            .tp-caption.Newspaper-Title {
+                font-size: 48px !important;
+                /* font lebih besar untuk desktop */
+                line-height: 50px !important;
+                top: 5px !important;
+                /* posisinya agak ke bawah */
+                padding: 0px 10px !important;
+                width: 60% !important;
+                /* lebarnya lebih kecil dari mobile */
+            }
+
+            .tp-caption.Newspaper-Subtitle {
+                font-size: 32px !important;
+                line-height: 36px !important;
+                top: 5px !important;
+                /* posisinya di bawah title */
+                padding: 10px 10px !important;
+                width: 60% !important;
+            }
+        }
+
+        /* VERSI MOBILE */
+        @media (max-width: 480px) {
+            .tp-caption.Newspaper-Title {
+                font-size: 15px !important;
+                line-height: 25px !important;
+                top: 10px !important;
+                /* dinaikkan dari 180px ke 120px */
+                padding: 2px 4px !important;
+                width: 90% !important;
+            }
+
+            .tp-caption.Newspaper-Subtitle {
+                font-size: 16px !important;
+                line-height: 20px !important;
+                top: 10px !important;
+                /* dinaikkan dari 180px ke 120px */
+                padding: 0 4px !important;
+                width: 90% !important;
+            }
+        }
     </style>
     @stack('css')
 
@@ -249,6 +296,13 @@
 
         .whatsapp-icon {
             margin: 0;
+        }
+
+        /* Mobile: turun lebih dekat ke bawah */
+        @media (max-width: 768px) {
+            .whatsapp-float {
+                bottom: 20px;
+            }
         }
     </style>
 

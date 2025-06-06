@@ -50,9 +50,28 @@
                 transform: translateX(-100%);
             }
         }
+
+        /* Versi mobile */
+        @media (max-width: 480px) {
+            .breaking-news-container {
+                height: 35px;
+                /* lebih pendek */
+                font-size: 13px;
+                /* font lebih kecil */
+            }
+
+            .breaking-news-label {
+                padding: 0 8px;
+                /* padding lebih kecil */
+            }
+
+            .news-marquee {
+                animation-duration: 12s;
+                /* marquee lebih cepat agar tidak terlalu lama */
+            }
+        }
     </style>
 @endpush
-
 
 @section('content')
     <!-- Main Slider -->

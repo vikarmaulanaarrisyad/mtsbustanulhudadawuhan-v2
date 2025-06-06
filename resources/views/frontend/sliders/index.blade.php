@@ -33,7 +33,7 @@
                         <div class="tp-caption Newspaper-Title   tp-resizeme" id="slide-{{ $s->id }}-layer-2"
                             data-x="['center','center','center','center']" data-hoffset="['0','0','0','0']"
                             data-y="['top','top','top','top']" data-voffset="['250','250','250','240']"
-                            data-fontsize="['50','50','50','30']" data-lineheight="['55','55','55','35']"
+                            data-fontsize="['50','50','50','50']" data-lineheight="['55','55','55','35']"
                             data-width="full" data-height="none" data-whitespace="normal" data-type="text"
                             data-responsive_offset="on"
                             data-frames='[{"from":"y:[-100%];z:0;rX:0deg;rY:0;rZ:0;sX:1;sY:1;skX:0;skY:0;","mask":"x:0px;y:0px;s:inherit;e:inherit;","speed":1500,"to":"o:1;","delay":1000,"ease":"Power3.easeInOut"},{"delay":"wait","speed":1000,"to":"auto:auto;","mask":"x:0;y:0;s:inherit;e:inherit;","ease":"Power3.easeInOut"}]'
@@ -71,7 +71,7 @@
                             data-paddingright="[0,0,0,0]" data-paddingbottom="[20,0,0,0]"
                             data-paddingleft="[0,0,0,0]"
                             style="z-index: 7; text-transform:capitalize; white-space: unset; color:#fff; font-family:rubik; font-size:18px; line-height:28px; font-weight:400;">
-                            {{ \Illuminate\Support\Str::limit(strip_tags($s->isi), 20, '...') }}
+                            {{ \Illuminate\Support\Str::limit(strip_tags($s->isi), 80, '...') }}
 
                         </div>
                         <!-- LAYER NR. 4 -->

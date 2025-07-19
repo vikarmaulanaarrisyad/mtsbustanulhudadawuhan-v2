@@ -12,9 +12,11 @@ class HomePageController extends Controller
 {
     public function index()
     {
-        $listBerita = Berita::with('kategori', 'user', 'komentars')->where('status', 'publish')->limit(10)->take(10)->orderBy('published_at', 'desc')->get();
-        $sliders = Berita::where('status', 'publish')->where('is_slider', '1')->get();
-        return view('frontend.homepage.index', compact('listBerita', 'sliders'));
+        // $listBerita = Berita::with('kategori', 'user', 'komentars')->where('status', 'publish')->limit(10)->take(10)->orderBy('published_at', 'desc')->get();
+        // $sliders = Berita::where('status', 'publish')->where('is_slider', '1')->get();
+        // return view('frontend.homepage.index', compact('listBerita', 'sliders'));
+
+        return view('maintance.index');
     }
 
     public function detail($slug)
